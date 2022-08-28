@@ -1,0 +1,9 @@
+^bcchr\.Rproj$
+^\.Rproj\.user$
+^README\.Rmd$
+dev/*
+^LICENSE\.md$
+^\.github$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
