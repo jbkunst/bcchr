@@ -3,7 +3,7 @@ Title: API para Base de Datos Estadísticos del Banco Central de Chile
 Version: 0.0.0.9000
 Authors@R: c(
     person("Joshua", "Kunst", , "jbkunst@gmail.com", role = c("aut", "cre")),
-    person("Ignacio", "Rossi", , "ijrossi@uc.cl ", role = c("aut", "cre"))
+    person("Ignacio", "Rossi", , "ijrossi@uc.cl ", role = c("aut"))
     )
 Description: Paquete para descargar series del BCCh.
 License: MIT + file LICENSE
