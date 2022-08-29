@@ -11,6 +11,8 @@ usethis::use_package("utils")
 
 usethis::use_mit_license()
 
+usethis::use_readme_rmd()
+
 usethis::use_github_actions_badge()
 
 usethis::use_github_action_check_standard()
