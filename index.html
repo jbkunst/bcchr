@@ -82,12 +82,28 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jkunst.com/bcchr/" class="external-link">bcchr</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span></span>
-<span>  bcc_api_user <span class="op">=</span> <span class="st">"usuarios"</span>,</span>
+<span>  bcc_api_user <span class="op">=</span> <span class="st">"usuario"</span>,</span>
 <span>  bcc_api_pass <span class="op">=</span> <span class="st">"contraseña"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Luego la funciones acceden a estos valores para hacer los <em>request</em> a la API.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">desempleo</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bcch_GetSeries.html">bcch_GetSeries</a></span><span class="op">(</span><span class="st">"F049.DES.TAS.INE9.10.M"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">desempleo</span></span>
+<span><span class="co">#&gt; # A tibble: 148 × 3</span></span>
+<span><span class="co">#&gt;    indexDateString value statusCode</span></span>
+<span><span class="co">#&gt;    &lt;date&gt;          &lt;dbl&gt; &lt;chr&gt;     </span></span>
+<span><span class="co">#&gt;  1 2010-03-01       9.23 OK        </span></span>
+<span><span class="co">#&gt;  2 2010-04-01       8.84 OK        </span></span>
+<span><span class="co">#&gt;  3 2010-05-01       9.09 OK        </span></span>
+<span><span class="co">#&gt;  4 2010-06-01       8.66 OK        </span></span>
+<span><span class="co">#&gt;  5 2010-07-01       8.51 OK        </span></span>
+<span><span class="co">#&gt;  6 2010-08-01       8.44 OK        </span></span>
+<span><span class="co">#&gt;  7 2010-09-01       8.12 OK        </span></span>
+<span><span class="co">#&gt;  8 2010-10-01       7.81 OK        </span></span>
+<span><span class="co">#&gt;  9 2010-11-01       7.23 OK        </span></span>
+<span><span class="co">#&gt; 10 2010-12-01       7.21 OK        </span></span>
+<span><span class="co">#&gt; # … with 138 more rows</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">desempleo</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-4-1.png" width="100%"></p>
