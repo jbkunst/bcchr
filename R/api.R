@@ -72,7 +72,7 @@ bcch_SearchSeries <- function(
 
 }
 
-#' Bbtener los datos de series.
+#' Obtener los datos de series.
 #'
 #' @param timeseries Código de la serie de tiempo a consultar (obligatorio).
 #' @param user Nombre de usuario (obligatorio).
@@ -140,4 +140,26 @@ bcch_GetSeries <- function(
 
 }
 
+#' Descarga y leer Catálogo de Series
+#'
+#' @details https://si3.bcentral.cl/estadisticas/Principal1/web_services/index.htm
+#'
+#' @examples
+#'
+#' bcch_CatalogoSeries()
+#'
+#' @export
+bcch_CatalogoSeries <- function(){
+
+  url_path <- "https://si3.bcentral.cl/estadisticas/Principal1/Web_Services/Webservices/series.xlsx"
+
+  tfile <- tempfile(fileext = ".xlsx")
+
+  utils::download.file(url_path, tfile, method = "libcurl", mode = "wb")
+
+  dfseries <- readxl::read_excel(tfile)
+
+  dfseries
+
+}
 

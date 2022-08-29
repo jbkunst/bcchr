@@ -6,6 +6,8 @@ usethis::use_package("dplyr")
 usethis::use_package("lubridate")
 usethis::use_package("ggplot2")
 usethis::use_package("rlang")
+usethis::use_package("readxl")
+usethis::use_package("utils")
 
 usethis::use_mit_license()
 

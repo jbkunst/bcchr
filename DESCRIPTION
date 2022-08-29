@@ -19,5 +19,7 @@ Imports:
     lubridate,
     purrr,
     readr,
+    readxl,
     rlang,
-    tibble
+    tibble,
+    utils

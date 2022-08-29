@@ -2,7 +2,7 @@
 % Please edit documentation in R/api.R
 \name{bcch_GetSeries}
 \alias{bcch_GetSeries}
-\title{Bbtener los datos de series.}
+\title{Obtener los datos de series.}
 \usage{
 bcch_GetSeries(
   timeseries = NULL,
@@ -28,7 +28,7 @@ parámetro no está presente, se recoge por defecto hasta el
 último dato disponible (opcional).}
 }
 \description{
-Bbtener los datos de series.
+Obtener los datos de series.
 }
 \details{
 https://si3.bcentral.cl/estadisticas/Principal1/web_services/index.htm
