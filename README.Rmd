@@ -53,7 +53,7 @@ Luego de cargar el paquete se debe setear los parámetros de acceso utilizando
 library(bcchr)
 
 options(
-  bcc_api_user = "usuarios",
+  bcc_api_user = "usuario",
   bcc_api_pass = "contraseña"
 )
 ```
@@ -63,6 +63,8 @@ Luego la funciones acceden a estos valores para hacer los _request_ a la API.
 
 ```{r}
 desempleo <- bcch_GetSeries("F049.DES.TAS.INE9.10.M")
+
+desempleo
 
 autoplot(desempleo)
 ```

@@ -35,7 +35,7 @@ utilizando `options`.
 library(bcchr)
 
 options(
-  bcc_api_user = "usuarios",
+  bcc_api_user = "usuario",
   bcc_api_pass = "contraseña"
 )
 ```
@@ -45,6 +45,22 @@ API.
 
 ``` r
 desempleo <- bcch_GetSeries("F049.DES.TAS.INE9.10.M")
+
+desempleo
+#> # A tibble: 148 × 3
+#>    indexDateString value statusCode
+#>    <date>          <dbl> <chr>     
+#>  1 2010-03-01       9.23 OK        
+#>  2 2010-04-01       8.84 OK        
+#>  3 2010-05-01       9.09 OK        
+#>  4 2010-06-01       8.66 OK        
+#>  5 2010-07-01       8.51 OK        
+#>  6 2010-08-01       8.44 OK        
+#>  7 2010-09-01       8.12 OK        
+#>  8 2010-10-01       7.81 OK        
+#>  9 2010-11-01       7.23 OK        
+#> 10 2010-12-01       7.21 OK        
+#> # … with 138 more rows
 
 autoplot(desempleo)
 ```
