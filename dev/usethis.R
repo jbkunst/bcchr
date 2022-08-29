@@ -17,3 +17,7 @@ usethis::use_github_action_check_standard()
 usethis::use_pkgdown()
 usethis::use_pkgdown_github_pages()
 
+# test pkgdown ------------------------------------------------------------
+pkgdown::init_site()
+pkgdown::build_home(preview = TRUE)
+
