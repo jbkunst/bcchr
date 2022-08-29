@@ -13,15 +13,19 @@ bcch_GetSeries(
 )
 }
 \arguments{
-\item{timeseries}{(obligatorio): incorporar código de la serie de tiempo a consultar.}
+\item{timeseries}{Código de la serie de tiempo a consultar (obligatorio).}
 
-\item{user}{(obligatorio): completar nombre de usuario.}
+\item{user}{Nombre de usuario (obligatorio).}
 
-\item{pass}{(obligatorio): completar contraseña.}
+\item{pass}{Contraseña (obligatorio).}
 
-\item{firstdate}{(opcional): ingresar fecha desde la cual se requiere recoger datos. Si el parámetro no está presente, se recoge por defecto desde el primer dato disponible.}
+\item{firstdate}{Fecha desde la cual se requiere recoger datos. Si el
+parámetro no está presente, se recoge por defecto desde el primer
+dato disponible (opcional).}
 
-\item{lastdate}{(opcional): ingresar fecha hasta la cual se requiere recoger datos. Si el parámetro no está presente, se recoge por defecto hasta el último dato disponible.}
+\item{lastdate}{Fecha hasta la cual se requiere recoger datos. Si el
+parámetro no está presente, se recoge por defecto hasta el
+último dato disponible (opcional).}
 }
 \description{
 Bbtener los datos de series.

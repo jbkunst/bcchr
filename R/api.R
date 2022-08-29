@@ -9,9 +9,11 @@
 
 #' Obtener lista de series disponibles por frecuencia y su metadata.
 #'
-#' @param user (obligatorio): completar nombre de usuario.
-#' @param pass (obligatorio): completar contraseña.
-#' @param frequency (obligatorio): completar con la frecuencia para la cual se quiere consultar el catálogo de series disponibles. Puede tomar los valores DAILY, MONTHLY, QUARTERLY o ANNUAL.
+#' @param user Nombre de usuario (obligatorio).
+#' @param pass Contraseña (obligatorio).
+#' @param frequency Frecuencia para la cual se quiere consultar el catálogo
+#'   de series disponibles. Puede tomar los valores DAILY, MONTHLY, QUARTERLY
+#'    o ANNUAL (obligatorio).
 #'
 #' @details https://si3.bcentral.cl/estadisticas/Principal1/web_services/index.htm
 #'
@@ -72,11 +74,15 @@ bcch_SearchSeries <- function(
 
 #' Bbtener los datos de series.
 #'
-#' @param timeseries (obligatorio): incorporar código de la serie de tiempo a consultar.
-#' @param user (obligatorio): completar nombre de usuario.
-#' @param pass (obligatorio): completar contraseña.
-#' @param firstdate (opcional): ingresar fecha desde la cual se requiere recoger datos. Si el parámetro no está presente, se recoge por defecto desde el primer dato disponible.
-#' @param lastdate (opcional): ingresar fecha hasta la cual se requiere recoger datos. Si el parámetro no está presente, se recoge por defecto hasta el último dato disponible.
+#' @param timeseries Código de la serie de tiempo a consultar (obligatorio).
+#' @param user Nombre de usuario (obligatorio).
+#' @param pass Contraseña (obligatorio).
+#' @param firstdate Fecha desde la cual se requiere recoger datos. Si el
+#'   parámetro no está presente, se recoge por defecto desde el primer
+#'   dato disponible (opcional).
+#' @param lastdate Fecha hasta la cual se requiere recoger datos. Si el
+#'   parámetro no está presente, se recoge por defecto hasta el
+#'   último dato disponible (opcional).
 #'
 #' @details https://si3.bcentral.cl/estadisticas/Principal1/web_services/index.htm
 #'

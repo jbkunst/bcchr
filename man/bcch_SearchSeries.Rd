@@ -11,11 +11,13 @@ bcch_SearchSeries(
 )
 }
 \arguments{
-\item{frequency}{(obligatorio): completar con la frecuencia para la cual se quiere consultar el catálogo de series disponibles. Puede tomar los valores DAILY, MONTHLY, QUARTERLY o ANNUAL.}
+\item{frequency}{Frecuencia para la cual se quiere consultar el catálogo
+de series disponibles. Puede tomar los valores DAILY, MONTHLY, QUARTERLY
+o ANNUAL (obligatorio).}
 
-\item{user}{(obligatorio): completar nombre de usuario.}
+\item{user}{Nombre de usuario (obligatorio).}
 
-\item{pass}{(obligatorio): completar contraseña.}
+\item{pass}{Contraseña (obligatorio).}
 }
 \description{
 Obtener lista de series disponibles por frecuencia y su metadata.
