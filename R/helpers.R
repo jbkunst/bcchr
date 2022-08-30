@@ -14,7 +14,7 @@
 #'
 #' dfserie <- bcch_GetSeries(timeseries = codigo, firstdate = as.Date("2015-01-01"))
 #'
-#' dfserie2 <- bcch_calculo_var_porc(dfserie, tipo = "periodo_anterior")
+#' dfserie2 <- bcch_calculo_var_porc(dfserie, tipo = "anio_anterior")
 #'
 #' autoplot(dfserie, dfserie2) +
 #'   ggplot2::facet_wrap(~descripEsp, scales = "free") +
@@ -35,7 +35,7 @@ bcch_calculo_var_porc <- function(dfserie,
 
   dfserie <- dplyr::arrange(dfserie, .data$indexDateString)
 
-  if(tipo == "periodo_anterior"){
+  if(tipo == "anio_anterior"){
 
     # UNITS <- c("DAILY", "MONTHLY", "QUARTERLY", "ANNUAL")
     nlag <- dplyr::case_when(
@@ -59,7 +59,7 @@ bcch_calculo_var_porc <- function(dfserie,
 
   attr(dfserie, "descripEsp") <- stringr::str_c(
     attr(dfserie, "descripEsp"),
-    stringr::str_glue("variacion c/r {tipo}")
+    stringr::str_glue(" variacion c/r {tipo}")
   )
 
   attr(dfserie, "bcch_calculo_var_porc") <- tipo
