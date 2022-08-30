@@ -16,6 +16,9 @@
     <loc>/index.html</loc>
   </url>
   <url>
+    <loc>/reference/as.ts.bcch_series.html</loc>
+  </url>
+  <url>
     <loc>/reference/autoplot.bcch_series.html</loc>
   </url>
   <url>
@@ -26,6 +29,12 @@
   </url>
   <url>
     <loc>/reference/bcch_SearchSeries.html</loc>
+  </url>
+  <url>
+    <loc>/reference/bcch_calculo_var_porc.html</loc>
+  </url>
+  <url>
+    <loc>/reference/bcchseries.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
