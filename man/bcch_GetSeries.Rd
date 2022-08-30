@@ -40,8 +40,6 @@ options(
  bcc_api_pass = "cxynr4qyLLBw"
 )
 
-bcch_GetSeries("F049.DES.TAS.INE9.10.M")
 
-bcch_GetSeries("F073.TCO.PRE.Z.D")
 
 }

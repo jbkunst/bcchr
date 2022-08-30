@@ -8,6 +8,9 @@ usethis::use_package("ggplot2")
 usethis::use_package("rlang")
 usethis::use_package("readxl")
 usethis::use_package("utils")
+usethis::use_package("stats")
+usethis::use_package("stringr")
+usethis::use_package("xts")
 
 usethis::use_mit_license()
 

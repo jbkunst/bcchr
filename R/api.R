@@ -7,6 +7,79 @@
 #   bcc_api_pass = "cxynr4qyLLBw"
 # )
 
+#' Obtener los datos de series.
+#'
+#' @param timeseries Código de la serie de tiempo a consultar (obligatorio).
+#' @param user Nombre de usuario (obligatorio).
+#' @param pass Contraseña (obligatorio).
+#' @param firstdate Fecha desde la cual se requiere recoger datos. Si el
+#'   parámetro no está presente, se recoge por defecto desde el primer
+#'   dato disponible (opcional).
+#' @param lastdate Fecha hasta la cual se requiere recoger datos. Si el
+#'   parámetro no está presente, se recoge por defecto hasta el
+#'   último dato disponible (opcional).
+#'
+#' @details https://si3.bcentral.cl/estadisticas/Principal1/web_services/index.htm
+#'
+#' @examples
+#'
+#' options(
+#'  bcc_api_user = 178956728,
+#'  bcc_api_pass = "cxynr4qyLLBw"
+#' )
+#'
+#  bcch_GetSeries(timeseries = "F049.DES.TAS.INE9.10.M")
+#'
+#  bcch_GetSeries(timeseries = "F073.TCO.PRE.Z.D")
+#'
+#' @export
+bcch_GetSeries <- function(
+    timeseries = NULL,
+    user = getOption("bcc_api_user"),
+    pass = getOption("bcc_api_pass"),
+    firstdate = NULL,
+    lastdate = NULL
+    ){
+
+  stopifnot(is.character(timeseries))
+  stopifnot(length(timeseries) == 1)
+
+  qget <- httr::GET(
+    "https://si3.bcentral.cl/SieteRestWS/SieteRestWS.ashx",
+    query = list(
+      user = user,
+      pass = pass,
+      timeseries = timeseries,
+      `function` = "GetSeries",
+      firstdate = firstdate,
+      lastdate = lastdate
+    )
+  )
+
+  content <- httr::content(qget)
+
+  df <- content[["Series"]][["Obs"]] |>
+    purrr::transpose() |>
+    tibble::as_tibble() |>
+    dplyr::mutate(dplyr::across(dplyr::everything(), unlist))
+
+  df <- suppressMessages(readr::type_convert(df, na = c("", "NA", "NaN", "NeuN")))
+  df <- dplyr::mutate(df, indexDateString = lubridate::dmy(.data$indexDateString))
+
+  # attrs
+  attr(df, "descripEsp")    <- content$Series$descripEsp
+  attr(df, "descripIng")    <- content$Series$descripIng
+  attr(df, "seriesId")      <- content$Series$seriesId
+  attr(df, "frequencyCode") <- bcchr::bcchseries |>
+    dplyr::filter(.data$seriesId == timeseries) |>
+    dplyr::pull(.data$frequencyCode)
+
+  class(df) <- c("bcch_series", class(df))
+
+  df
+
+}
+
 #' Obtener lista de series disponibles por frecuencia y su metadata.
 #'
 #' @param user Nombre de usuario (obligatorio).
@@ -67,74 +140,6 @@ bcch_SearchSeries <- function(
           )
         )
   })
-
-  df
-
-}
-
-#' Obtener los datos de series.
-#'
-#' @param timeseries Código de la serie de tiempo a consultar (obligatorio).
-#' @param user Nombre de usuario (obligatorio).
-#' @param pass Contraseña (obligatorio).
-#' @param firstdate Fecha desde la cual se requiere recoger datos. Si el
-#'   parámetro no está presente, se recoge por defecto desde el primer
-#'   dato disponible (opcional).
-#' @param lastdate Fecha hasta la cual se requiere recoger datos. Si el
-#'   parámetro no está presente, se recoge por defecto hasta el
-#'   último dato disponible (opcional).
-#'
-#' @details https://si3.bcentral.cl/estadisticas/Principal1/web_services/index.htm
-#'
-#' @examples
-#'
-#' options(
-#'  bcc_api_user = 178956728,
-#'  bcc_api_pass = "cxynr4qyLLBw"
-#' )
-#'
-#' bcch_GetSeries("F049.DES.TAS.INE9.10.M")
-#'
-#' bcch_GetSeries("F073.TCO.PRE.Z.D")
-#'
-#' @export
-bcch_GetSeries <- function(
-    timeseries = NULL,
-    user = getOption("bcc_api_user"),
-    pass = getOption("bcc_api_pass"),
-    firstdate = NULL,
-    lastdate = NULL
-    ){
-
-  stopifnot(is.character(timeseries))
-
-  qget <- httr::GET(
-    "https://si3.bcentral.cl/SieteRestWS/SieteRestWS.ashx",
-    query = list(
-      user = user,
-      pass = pass,
-      timeseries = timeseries,
-      `function` = "GetSeries",
-      firstdate = firstdate,
-      lastdate = lastdate
-    )
-  )
-
-  content <- httr::content(qget)
-
-  df <- content[["Series"]][["Obs"]] |>
-    purrr::transpose() |>
-    tibble::as_tibble() |>
-    dplyr::mutate(dplyr::across(dplyr::everything(), unlist))
-
-  df <- suppressMessages(readr::type_convert(df, na = c("", "NA", "NaN", "NeuN")))
-  df <- dplyr::mutate(df, indexDateString = lubridate::dmy(.data$indexDateString))
-
-  attr(df, "descripEsp") <- content$Series$descripEsp
-  attr(df, "descripIng") <- content$Series$descripIng
-  attr(df, "seriesId") <- content$Series$seriesId
-
-  class(df) <- c("bcch_series", class(df))
 
   df
 
