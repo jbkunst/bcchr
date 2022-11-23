@@ -25,10 +25,10 @@ codigo <- "F032.PIB.FLU.R.CLP.EP18.Z.Z.0.T"
 
 dfserie <- bcch_GetSeries(timeseries = codigo, firstdate = as.Date("2015-01-01"))
 
-dfserie2 <- bcch_calculo_var_porc(dfserie, tipo = "periodo_anterior")
+dfserie2 <- bcch_calculo_var_porc(dfserie, tipo = "anio_anterior")
 
 autoplot(dfserie, dfserie2) +
-  ggplot2::facet_wrap(~descripEsp, scales = "free")
-
+  ggplot2::facet_wrap(~descripEsp, scales = "free") +
+  ggplot2::theme(legend.position = "bottom")
 
 }
