@@ -31,4 +31,5 @@ serie_ts <- as.ts(dfserie)
 plot(serie_ts)
 
 }
+
 }

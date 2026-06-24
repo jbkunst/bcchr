@@ -38,4 +38,5 @@ autoplot(x, x2) +
   ggplot2::facet_wrap(~descripEsp, scales = "free_y")
 
 }
+
 }

@@ -33,4 +33,5 @@ autoplot(dfserie, dfserie2) +
   ggplot2::theme(legend.position = "bottom")
 
 }
+
 }
