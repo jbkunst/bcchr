@@ -27,6 +27,7 @@ https://si3.bcentral.cl/estadisticas/Principal1/web_services/index.htm
 }
 \examples{
 
+\dontrun{
 options(
  bcc_api_user = 178956728,
  bcc_api_pass = "cxynr4qyLLBw"
@@ -35,4 +36,5 @@ options(
 bcch_SearchSeries("ANNUAL")
 
 
+}
 }

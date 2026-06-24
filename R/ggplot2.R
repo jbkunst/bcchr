@@ -9,6 +9,7 @@ ggplot2::autoplot
 #'
 #' @examples
 #'
+#' \dontrun{
 #' options(
 #'   bcc_api_user = 178956728,
 #'   bcc_api_pass = "cxynr4qyLLBw"
@@ -28,6 +29,8 @@ ggplot2::autoplot
 #'
 #' autoplot(x, x2) +
 #'   ggplot2::facet_wrap(~descripEsp, scales = "free_y")
+#'
+#' }
 #'
 #' @importFrom rlang .data
 #' @export

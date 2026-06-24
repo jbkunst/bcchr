@@ -43,6 +43,19 @@ options(
 Luego la funciones acceden a estos valores para hacer los *request* a la
 API.
 
+`bcch_GetSeries()` now reads Banco Central JSON responses as raw bytes
+and converts them from `ISO-8859-1` to `UTF-8` before parsing. This
+avoids encoding-related JSON parsing failures in Linux and GitHub
+Actions environments.
+
+``` r
+bcchr::bcch_GetSeries(
+  "F032.PIB.FLU.R.CLP.EP18.Z.Z.0.T",
+  firstdate = as.Date("2000-01-01"),
+  lastdate = Sys.Date()
+)
+```
+
 ``` r
 desempleo <- bcch_GetSeries("F049.DES.TAS.INE9.10.M")
 

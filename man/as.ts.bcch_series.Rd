@@ -16,6 +16,7 @@ as.ts generic method for bcch_series objects
 }
 \examples{
 
+\dontrun{
 options(
  bcc_api_user = 178956728,
  bcc_api_pass = "cxynr4qyLLBw"
@@ -29,4 +30,5 @@ serie_ts <- as.ts(dfserie)
 
 plot(serie_ts)
 
+}
 }

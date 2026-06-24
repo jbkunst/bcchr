@@ -23,6 +23,7 @@
 #'
 #' @examples
 #'
+#' \dontrun{
 #' options(
 #'  bcc_api_user = 178956728,
 #'  bcc_api_pass = "cxynr4qyLLBw"
@@ -31,6 +32,8 @@
 #  bcch_GetSeries(timeseries = "F049.DES.TAS.INE9.10.M")
 #'
 #  bcch_GetSeries(timeseries = "F073.TCO.PRE.Z.D")
+#'
+#' }
 #'
 #' @export
 bcch_GetSeries <- function(
@@ -56,7 +59,17 @@ bcch_GetSeries <- function(
     )
   )
 
-  content <- httr::content(qget)
+  raw <- httr::content(qget, as = "raw")
+  txt <- iconv(rawToChar(raw), from = "ISO-8859-1", to = "UTF-8")
+  content <- jsonlite::fromJSON(txt, simplifyVector = FALSE)
+
+  if (!identical(content$Codigo, 0L)) {
+    description <- content$Descripcion
+    if (is.null(description)) {
+      description <- "unknown error"
+    }
+    stop("Banco Central API error: ", description, call. = FALSE)
+  }
 
   df <- content[["Series"]][["Obs"]] |>
     purrr::transpose() |>
@@ -92,6 +105,7 @@ bcch_GetSeries <- function(
 #'
 #' @examples
 #'
+#' \dontrun{
 #' options(
 #'  bcc_api_user = 178956728,
 #'  bcc_api_pass = "cxynr4qyLLBw"
@@ -99,6 +113,7 @@ bcch_GetSeries <- function(
 #'
 #' bcch_SearchSeries("ANNUAL")
 #'
+#' }
 #'
 #' @export
 bcch_SearchSeries <- function(
@@ -151,7 +166,9 @@ bcch_SearchSeries <- function(
 #'
 #' @examples
 #'
+#' \dontrun{
 #' bcch_CatalogoSeries()
+#' }
 #'
 #' @export
 bcch_CatalogoSeries <- function(){

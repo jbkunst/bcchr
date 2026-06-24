@@ -16,6 +16,7 @@ autoplot generic method for bcch_series objects
 }
 \examples{
 
+\dontrun{
 options(
   bcc_api_user = 178956728,
   bcc_api_pass = "cxynr4qyLLBw"
@@ -36,4 +37,5 @@ autoplot(x, x2)
 autoplot(x, x2) +
   ggplot2::facet_wrap(~descripEsp, scales = "free_y")
 
+}
 }

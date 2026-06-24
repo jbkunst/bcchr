@@ -14,6 +14,8 @@ https://si3.bcentral.cl/estadisticas/Principal1/web_services/index.htm
 }
 \examples{
 
+\dontrun{
 bcch_CatalogoSeries()
+}
 
 }

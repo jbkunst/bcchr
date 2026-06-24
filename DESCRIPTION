@@ -1,9 +1,9 @@
 Package: bcchr
 Title: API para Base de Datos Estadísticos del Banco Central de Chile
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: c(
-    person("Joshua", "Kunst", , "jbkunst@gmail.com", role = c("aut", "cre")),
-    person("Ignacio", "Rossi", , "ijrossi@uc.cl ", role = c("aut"))
+    person("Joshua", "Kunst", email = "jbkunst@gmail.com", role = c("aut", "cre")),
+    person("Ignacio", "Rossi", email = "ijrossi@uc.cl", role = c("aut"))
     )
 Description: Paquete para descargar series del BCCh.
 License: MIT + file LICENSE
@@ -16,6 +16,7 @@ Imports:
     dplyr,
     ggplot2,
     httr,
+    jsonlite,
     lubridate,
     purrr,
     readr,
@@ -27,5 +28,5 @@ Imports:
     utils,
     xts
 Depends: 
-    R (>= 2.10)
+    R (>= 4.1.0)
 LazyData: true

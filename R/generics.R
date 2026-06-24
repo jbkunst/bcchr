@@ -9,6 +9,7 @@ stats::as.ts
 #'
 #' @examples
 #'
+#' \dontrun{
 #' options(
 #'  bcc_api_user = 178956728,
 #'  bcc_api_pass = "cxynr4qyLLBw"
@@ -21,6 +22,8 @@ stats::as.ts
 #' serie_ts <- as.ts(dfserie)
 #'
 #' plot(serie_ts)
+#'
+#' }
 #'
 #' @export
 as.ts.bcch_series <- function(x, ...){
