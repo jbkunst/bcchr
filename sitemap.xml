@@ -1,45 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/as.ts.bcch_series.html</loc>
-  </url>
-  <url>
-    <loc>/reference/autoplot.bcch_series.html</loc>
-  </url>
-  <url>
-    <loc>/reference/bcch_CatalogoSeries.html</loc>
-  </url>
-  <url>
-    <loc>/reference/bcch_GetSeries.html</loc>
-  </url>
-  <url>
-    <loc>/reference/bcch_SearchSeries.html</loc>
-  </url>
-  <url>
-    <loc>/reference/bcch_calculo_var_porc.html</loc>
-  </url>
-  <url>
-    <loc>/reference/bcchseries.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/reexports.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://jkunst.com/bcchr/404.html</loc></url>
+<url><loc>https://jkunst.com/bcchr/LICENSE-text.html</loc></url>
+<url><loc>https://jkunst.com/bcchr/LICENSE.html</loc></url>
+<url><loc>https://jkunst.com/bcchr/authors.html</loc></url>
+<url><loc>https://jkunst.com/bcchr/index.html</loc></url>
+<url><loc>https://jkunst.com/bcchr/news/index.html</loc></url>
+<url><loc>https://jkunst.com/bcchr/reference/as.ts.bcch_series.html</loc></url>
+<url><loc>https://jkunst.com/bcchr/reference/autoplot.bcch_series.html</loc></url>
+<url><loc>https://jkunst.com/bcchr/reference/bcch_CatalogoSeries.html</loc></url>
+<url><loc>https://jkunst.com/bcchr/reference/bcch_GetSeries.html</loc></url>
+<url><loc>https://jkunst.com/bcchr/reference/bcch_SearchSeries.html</loc></url>
+<url><loc>https://jkunst.com/bcchr/reference/bcch_calculo_var_porc.html</loc></url>
+<url><loc>https://jkunst.com/bcchr/reference/bcchseries.html</loc></url>
+<url><loc>https://jkunst.com/bcchr/reference/index.html</loc></url>
+<url><loc>https://jkunst.com/bcchr/reference/reexports.html</loc></url>
 </urlset>
+
