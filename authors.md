@@ -2,7 +2,7 @@
 
 ## Authors
 
-- **Joshua Kunst**. Author, maintainer.
+- **[Joshua Kunst](https://jkunst.com)**. Author, maintainer.
 
 - **Ignacio Rossi**. Author.
 
