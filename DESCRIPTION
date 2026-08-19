@@ -1,17 +1,17 @@
 Package: bcchr
 Title: API para Base de Datos Estadísticos del Banco Central de Chile
-Version: 0.0.2
+Version: 0.1.0
 Authors@R: c(
     person("Joshua", "Kunst", email = "jbkunst@gmail.com", role = c("aut", "cre")),
     person("Ignacio", "Rossi", email = "ijrossi@uc.cl", role = c("aut"))
     )
-Description: Paquete para descargar series del BCCh.
+Description: Paquete para descargar y explorar series del Banco Central de Chile.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 URL: https://jkunst.com/bcchr/, https://github.com/jbkunst/bcchr
 BugReports: https://github.com/jbkunst/bcchr/issues
-Imports: 
+Imports:
     dplyr,
     ggplot2,
     httr,
@@ -19,14 +19,8 @@ Imports:
     lubridate,
     purrr,
     readr,
-    readxl,
     rlang,
-    stats,
-    stringr,
-    tibble,
-    utils,
-    xts
-Depends: 
+    tibble
+Depends:
     R (>= 4.1.0)
-LazyData: true
 Config/roxygen2/version: 8.0.0
