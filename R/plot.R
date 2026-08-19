@@ -7,8 +7,11 @@
 #'   columns.
 #'
 #' @return A ggplot object.
+#' @importFrom rlang .data
 #' @export
 plot_series <- function(x) {
+
+  rlang::check_installed("ggplot2", reason = "to use `plot_series()`")
 
   if (!all(c("date", "value") %in% names(x))) {
     stop("`x` must contain `date` and `value` columns.", call. = FALSE)
