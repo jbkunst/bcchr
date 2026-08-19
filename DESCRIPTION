@@ -12,12 +12,8 @@ Roxygen: list(markdown = TRUE)
 URL: https://jkunst.com/bcchr/, https://github.com/jbkunst/bcchr
 BugReports: https://github.com/jbkunst/bcchr/issues
 Imports:
-    dplyr,
     httr,
     jsonlite,
-    lubridate,
-    purrr,
-    readr,
     rlang,
     tibble
 Suggests:
