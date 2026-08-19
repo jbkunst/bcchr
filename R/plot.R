@@ -1,20 +1,20 @@
-#' Plot a Banco Central series
+#' Graficar una serie del Banco Central
 #'
-#' Plot a data frame returned by [get_series()]. This is a small convenience
-#' helper; it does not add classes or modify the data.
+#' Grafica un data frame devuelto por [get_series()]. Es una ayuda pequeña de
+#' visualización: no agrega clases ni modifica los datos.
 #'
-#' @param x A data frame returned by [get_series()] with `date` and `value`
-#'   columns.
+#' @param x Data frame devuelto por [get_series()] con las columnas `date` y
+#'   `value`.
 #'
-#' @return A ggplot object.
+#' @return Un objeto ggplot.
 #' @importFrom rlang .data
 #' @export
 plot_series <- function(x) {
 
-  rlang::check_installed("ggplot2", reason = "to use `plot_series()`")
+  rlang::check_installed("ggplot2", reason = "para usar `plot_series()`")
 
   if (!all(c("date", "value") %in% names(x))) {
-    stop("`x` must contain `date` and `value` columns.", call. = FALSE)
+    stop("`x` debe contener las columnas `date` y `value`.", call. = FALSE)
   }
 
   ggplot2::ggplot(x, ggplot2::aes(x = .data$date, y = .data$value)) +
