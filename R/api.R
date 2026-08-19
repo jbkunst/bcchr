@@ -34,16 +34,10 @@ bcch_GetSeries <- function(timeseries, firstdate = NULL, lastdate = NULL, token 
     lastdate = lastdate
   )
 
-  x <- content$Series$Obs |>
-    purrr::transpose() |>
-    tibble::as_tibble() |>
-    dplyr::mutate(dplyr::across(dplyr::everything(), unlist))
-
-  x <- suppressMessages(
-    readr::type_convert(x, na = c("", "NA", "NaN", "NeuN", "ND"))
-  )
-
-  x$indexDateString <- lubridate::dmy(x$indexDateString)
+  x <- .bcch_rows(content$Series$Obs)
+  x$indexDateString <- as.Date(x$indexDateString, format = "%d-%m-%Y")
+  x$value[x$value %in% c("", "NA", "NaN", "NeuN", "ND")] <- NA_character_
+  x$value <- suppressWarnings(as.numeric(x$value))
 
   x
 }
@@ -73,17 +67,17 @@ bcch_SearchSeries <- function(frequency, token = NULL) {
     frequency = frequency
   )
 
-  x <- content$SeriesInfos |>
-    purrr::transpose() |>
-    tibble::as_tibble() |>
-    dplyr::mutate(dplyr::across(dplyr::everything(), unlist))
-
-  x <- suppressMessages(
-    readr::type_convert(x, na = c("", "NA", "NaN", "NeuN", "ND"))
+  x <- .bcch_rows(content$SeriesInfos)
+  date_columns <- intersect(
+    c("firstObservation", "lastObservation", "updatedAt", "createdAt"),
+    names(x)
   )
 
-  date_columns <- c("firstObservation", "lastObservation", "updatedAt", "createdAt")
-  x[date_columns] <- lapply(x[date_columns], lubridate::dmy)
+  x[date_columns] <- lapply(
+    x[date_columns],
+    as.Date,
+    format = "%d-%m-%Y"
+  )
 
   x
 }
