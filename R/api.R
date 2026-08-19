@@ -1,21 +1,21 @@
-# Low-level Banco Central API ----------------------------------------------
+# API de bajo nivel del Banco Central -------------------------------------
 
 #' Obtener los datos de una serie
 #'
-#' Acceso directo a la operación `GetSeries` del API del Banco Central.
+#' Acceso directo a la operación `GetSeries` de la API del Banco Central.
 #' Para la interfaz moderna use [get_series()].
 #'
 #' @param timeseries Código exacto de la serie.
 #' @param firstdate Fecha inicial opcional.
 #' @param lastdate Fecha final opcional.
-#' @param token Token del API del Banco Central.
+#' @param token Token de acceso a la API del Banco Central.
 #'
-#' @return Un tibble con los nombres originales entregados por el API.
+#' @return Un tibble con los nombres originales entregados por la API.
 #' @export
 bcch_GetSeries <- function(timeseries, firstdate = NULL, lastdate = NULL, token = NULL) {
 
   if (!is.character(timeseries) || length(timeseries) != 1 || !nzchar(timeseries)) {
-    stop("`timeseries` must be one non-empty character string.", call. = FALSE)
+    stop("`timeseries` debe ser una cadena de texto no vacía.", call. = FALSE)
   }
 
   if (!is.null(firstdate)) {
@@ -44,13 +44,13 @@ bcch_GetSeries <- function(timeseries, firstdate = NULL, lastdate = NULL, token 
 
 #' Obtener las series disponibles por frecuencia
 #'
-#' Acceso directo a la operación `SearchSeries` del API del Banco Central.
+#' Acceso directo a la operación `SearchSeries` de la API del Banco Central.
 #' Para la interfaz moderna use [metadata()] o [resolve_series()].
 #'
 #' @param frequency Frecuencia: `DAILY`, `MONTHLY`, `QUARTERLY` o `ANNUAL`.
-#' @param token Token del API del Banco Central.
+#' @param token Token de acceso a la API del Banco Central.
 #'
-#' @return Un tibble con los nombres originales entregados por el API.
+#' @return Un tibble con los nombres originales entregados por la API.
 #' @export
 bcch_SearchSeries <- function(frequency, token = NULL) {
 
@@ -58,7 +58,10 @@ bcch_SearchSeries <- function(frequency, token = NULL) {
 
   if (length(frequency) != 1 ||
       !frequency %in% c("DAILY", "MONTHLY", "QUARTERLY", "ANNUAL")) {
-    stop("`frequency` must be DAILY, MONTHLY, QUARTERLY, or ANNUAL.", call. = FALSE)
+    stop(
+      "`frequency` debe ser DAILY, MONTHLY, QUARTERLY o ANNUAL.",
+      call. = FALSE
+    )
   }
 
   content <- .bcch_request(
