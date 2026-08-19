@@ -66,14 +66,14 @@
 
 #' Metadata de las series
 #'
-#' Obtiene el catálogo actual de series disponibles del Banco Central de Chile.
-#' Use esta función para conocer qué series existen, su frecuencia y su
+#' Obtiene el catalogo actual de series disponibles del Banco Central de Chile.
+#' Use esta funcion para conocer que series existen, su frecuencia y su
 #' cobertura temporal.
 #'
 #' @param frequency Filtro opcional de frecuencia. Puede ser `DAILY`, `MONTHLY`,
 #'   `QUARTERLY` o `ANNUAL`. Si se omite, devuelve todas las frecuencias.
 #' @param token Token de acceso a la API REST del Banco Central. Por defecto lee
-#'   la opción `bcch_api_token` y luego la variable de entorno `BCCH_TOKEN`.
+#'   la opcion `bcch_api_token` y luego la variable de entorno `BCCH_TOKEN`.
 #'
 #' @return Un tibble con la metadata de las series y nombres de columnas en
 #'   snake_case.
@@ -113,10 +113,10 @@ metadata <- function(frequency = NULL, token = NULL) {
   tibble::as_tibble(do.call(rbind, x))
 }
 
-#' Resolver una descripción a series del Banco Central
+#' Resolver una descripcion a series del Banco Central
 #'
-#' Busca en el catálogo del Banco Central usando un término legible por una
-#' persona y devuelve las series candidatas. Esta función solo encuentra
+#' Busca en el catalogo del Banco Central usando un termino legible por una
+#' persona y devuelve las series candidatas. Esta funcion solo encuentra
 #' candidatos; no elige una serie por el usuario.
 #'
 #' @param query Texto a buscar, por ejemplo `"imacec"` o `"dolar observado"`.
@@ -128,7 +128,7 @@ metadata <- function(frequency = NULL, token = NULL) {
 resolve_series <- function(query, frequency = NULL, token = NULL) {
 
   if (!is.character(query) || length(query) != 1 || !nzchar(query)) {
-    stop("`query` debe ser una cadena de texto no vacía.", call. = FALSE)
+    stop("`query` debe ser una cadena de texto no vacia.", call. = FALSE)
   }
 
   normalize <- function(x) {
@@ -149,19 +149,19 @@ resolve_series <- function(query, frequency = NULL, token = NULL) {
 
 #' Describir una serie del Banco Central
 #'
-#' Devuelve la metadata de una serie identificada por su código exacto. Esta
-#' función no interpreta nombres en lenguaje natural. Use [resolve_series()]
-#' primero cuando no conozca el código de la serie.
+#' Devuelve la metadata de una serie identificada por su codigo exacto. Esta
+#' funcion no interpreta nombres en lenguaje natural. Use [resolve_series()]
+#' primero cuando no conozca el codigo de la serie.
 #'
-#' @param series_id Código exacto de la serie del Banco Central.
+#' @param series_id Codigo exacto de la serie del Banco Central.
 #' @param token Token de acceso a la API REST del Banco Central.
 #'
-#' @return Un tibble de una fila con la descripción de la serie.
+#' @return Un tibble de una fila con la descripcion de la serie.
 #' @export
 describe_series <- function(series_id, token = NULL) {
 
   if (!is.character(series_id) || length(series_id) != 1 || !nzchar(series_id)) {
-    stop("`series_id` debe ser una cadena de texto no vacía.", call. = FALSE)
+    stop("`series_id` debe ser una cadena de texto no vacia.", call. = FALSE)
   }
 
   x <- metadata(token = token)
@@ -169,7 +169,7 @@ describe_series <- function(series_id, token = NULL) {
 
   if (nrow(x) == 0) {
     stop(
-      "Código de serie desconocido. Use `resolve_series()` para encontrar un código válido.",
+      "Codigo de serie desconocido. Use `resolve_series()` para encontrar un codigo valido.",
       call. = FALSE
     )
   }
@@ -179,23 +179,23 @@ describe_series <- function(series_id, token = NULL) {
 
 #' Obtener observaciones de una serie del Banco Central
 #'
-#' Obtiene las observaciones de una serie identificada por su código exacto y,
-#' opcionalmente, un rango de fechas. Esta función solo obtiene datos para el
-#' código entregado; nunca interpreta ni resuelve nombres de series.
+#' Obtiene las observaciones de una serie identificada por su codigo exacto y,
+#' opcionalmente, un rango de fechas. Esta funcion solo obtiene datos para el
+#' codigo entregado; nunca interpreta ni resuelve nombres de series.
 #'
-#' @param series_id Código exacto de la serie del Banco Central.
+#' @param series_id Codigo exacto de la serie del Banco Central.
 #' @param from Fecha inicial opcional en formato `YYYY-MM-DD` o como objeto
 #'   `Date`.
 #' @param to Fecha final opcional en formato `YYYY-MM-DD` o como objeto `Date`.
 #' @param token Token de acceso a la API REST del Banco Central. Por defecto lee
-#'   la opción `bcch_api_token` y luego la variable de entorno `BCCH_TOKEN`.
+#'   la opcion `bcch_api_token` y luego la variable de entorno `BCCH_TOKEN`.
 #'
 #' @return Un tibble con las columnas `date`, `value` y `status_code`.
 #' @export
 get_series <- function(series_id, from = NULL, to = NULL, token = NULL) {
 
   if (!is.character(series_id) || length(series_id) != 1 || !nzchar(series_id)) {
-    stop("`series_id` debe ser una cadena de texto no vacía.", call. = FALSE)
+    stop("`series_id` debe ser una cadena de texto no vacia.", call. = FALSE)
   }
 
   x <- bcch_GetSeries(
