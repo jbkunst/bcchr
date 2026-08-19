@@ -1,5 +1,3 @@
-# Modern bcchr interface ---------------------------------------------------
-
 .bcch_request <- function(function_name, token, ...) {
 
   if (!is.character(token) || length(token) != 1 || !nzchar(token)) {
