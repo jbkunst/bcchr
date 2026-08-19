@@ -42,6 +42,30 @@
   token
 }
 
+.bcch_rows <- function(x) {
+
+  if (length(x) == 0) {
+    return(tibble::tibble())
+  }
+
+  fields <- unique(unlist(lapply(x, names), use.names = FALSE))
+
+  values <- lapply(fields, function(field) {
+    vapply(x, function(row) {
+      value <- row[[field]]
+
+      if (is.null(value) || length(value) == 0) {
+        return(NA_character_)
+      }
+
+      as.character(value[[1]])
+    }, character(1))
+  })
+
+  names(values) <- fields
+  tibble::as_tibble(values)
+}
+
 #' Series metadata
 #'
 #' Get the current Banco Central series catalog. Use this function to inspect
@@ -68,26 +92,22 @@ metadata <- function(frequency = NULL, token = NULL) {
     frequencies <- frequency
   }
 
-  token <- .bcch_token(token)
+  x <- lapply(frequencies, function(freq) {
+    raw <- bcch_SearchSeries(freq, token = token)
 
-  purrr::map_dfr(frequencies, function(freq) {
-    content <- .bcch_request("SearchSeries", token, frequency = freq)
-
-    content$SeriesInfos |>
-      purrr::transpose() |>
-      tibble::as_tibble() |>
-      dplyr::mutate(dplyr::across(dplyr::everything(), unlist)) |>
-      dplyr::transmute(
-        series_id = .data$seriesId,
-        frequency = .data$frequencyCode,
-        spanish_title = .data$spanishTitle,
-        english_title = .data$englishTitle,
-        first_observation = lubridate::dmy(.data$firstObservation),
-        last_observation = lubridate::dmy(.data$lastObservation),
-        updated_at = lubridate::dmy(.data$updatedAt),
-        created_at = lubridate::dmy(.data$createdAt)
-      )
+    tibble::tibble(
+      series_id = raw$seriesId,
+      frequency = raw$frequencyCode,
+      spanish_title = raw$spanishTitle,
+      english_title = raw$englishTitle,
+      first_observation = raw$firstObservation,
+      last_observation = raw$lastObservation,
+      updated_at = raw$updatedAt,
+      created_at = raw$createdAt
+    )
   })
+
+  tibble::as_tibble(do.call(rbind, x))
 }
 
 #' Resolve a human description to Banco Central series
@@ -141,7 +161,8 @@ describe_series <- function(series_id, token = NULL) {
     stop("`series_id` must be one non-empty character string.", call. = FALSE)
   }
 
-  x <- dplyr::filter(metadata(token = token), .data$series_id == series_id)
+  x <- metadata(token = token)
+  x <- x[x$series_id == series_id, , drop = FALSE]
 
   if (nrow(x) == 0) {
     stop(
@@ -173,30 +194,16 @@ get_series <- function(series_id, from = NULL, to = NULL, token = NULL) {
     stop("`series_id` must be one non-empty character string.", call. = FALSE)
   }
 
-  if (!is.null(from)) {
-    from <- as.character(from)
-  }
-
-  if (!is.null(to)) {
-    to <- as.character(to)
-  }
-
-  content <- .bcch_request(
-    "GetSeries",
-    .bcch_token(token),
+  x <- bcch_GetSeries(
     timeseries = series_id,
     firstdate = from,
-    lastdate = to
+    lastdate = to,
+    token = token
   )
 
-  content$Series$Obs |>
-    purrr::transpose() |>
-    tibble::as_tibble() |>
-    dplyr::mutate(dplyr::across(dplyr::everything(), unlist)) |>
-    suppressMessages(readr::type_convert(na = c("", "NA", "NaN", "NeuN", "ND"))) |>
-    dplyr::transmute(
-      date = lubridate::dmy(.data$indexDateString),
-      value = .data$value,
-      status_code = .data$statusCode
-    )
+  tibble::tibble(
+    date = x$indexDateString,
+    value = x$value,
+    status_code = x$statusCode
+  )
 }
