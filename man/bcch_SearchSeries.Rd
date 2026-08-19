@@ -2,39 +2,19 @@
 % Please edit documentation in R/api.R
 \name{bcch_SearchSeries}
 \alias{bcch_SearchSeries}
-\title{Obtener lista de series disponibles por frecuencia y su metadata.}
+\title{Obtener las series disponibles por frecuencia}
 \usage{
-bcch_SearchSeries(
-  frequency = NULL,
-  user = getOption("bcc_api_user"),
-  pass = getOption("bcc_api_pass")
-)
+bcch_SearchSeries(frequency, token = NULL)
 }
 \arguments{
-\item{frequency}{Frecuencia para la cual se quiere consultar el catálogo
-de series disponibles. Puede tomar los valores DAILY, MONTHLY, QUARTERLY
-o ANNUAL (obligatorio).}
+\item{frequency}{Frecuencia: \code{DAILY}, \code{MONTHLY}, \code{QUARTERLY} o \code{ANNUAL}.}
 
-\item{user}{Nombre de usuario (obligatorio).}
-
-\item{pass}{Contraseña (obligatorio).}
+\item{token}{Token del API del Banco Central.}
+}
+\value{
+Un tibble con los nombres originales entregados por el API.
 }
 \description{
-Obtener lista de series disponibles por frecuencia y su metadata.
-}
-\details{
-https://si3.bcentral.cl/estadisticas/Principal1/web_services/index.htm
-}
-\examples{
-
-\dontrun{
-options(
- bcc_api_user = 178956728,
- bcc_api_pass = "cxynr4qyLLBw"
-)
-
-bcch_SearchSeries("ANNUAL")
-
-}
-
+Acceso directo a la operación \code{SearchSeries} del API del Banco Central.
+Para la interfaz moderna use \code{\link[=metadata]{metadata()}} o \code{\link[=resolve_series]{resolve_series()}}.
 }

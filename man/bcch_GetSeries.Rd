@@ -2,47 +2,23 @@
 % Please edit documentation in R/api.R
 \name{bcch_GetSeries}
 \alias{bcch_GetSeries}
-\title{Obtener los datos de series.}
+\title{Obtener los datos de una serie}
 \usage{
-bcch_GetSeries(
-  timeseries = NULL,
-  user = getOption("bcc_api_user"),
-  pass = getOption("bcc_api_pass"),
-  firstdate = NULL,
-  lastdate = NULL
-)
+bcch_GetSeries(timeseries, firstdate = NULL, lastdate = NULL, token = NULL)
 }
 \arguments{
-\item{timeseries}{Código de la serie de tiempo a consultar (obligatorio).}
+\item{timeseries}{Código exacto de la serie.}
 
-\item{user}{Nombre de usuario (obligatorio).}
+\item{firstdate}{Fecha inicial opcional.}
 
-\item{pass}{Contraseña (obligatorio).}
+\item{lastdate}{Fecha final opcional.}
 
-\item{firstdate}{Fecha desde la cual se requiere recoger datos. Si el
-parámetro no está presente, se recoge por defecto desde el primer
-dato disponible (opcional).}
-
-\item{lastdate}{Fecha hasta la cual se requiere recoger datos. Si el
-parámetro no está presente, se recoge por defecto hasta el
-último dato disponible (opcional).}
+\item{token}{Token del API del Banco Central.}
+}
+\value{
+Un tibble con los nombres originales entregados por el API.
 }
 \description{
-Obtener los datos de series.
-}
-\details{
-https://si3.bcentral.cl/estadisticas/Principal1/web_services/index.htm
-}
-\examples{
-
-\dontrun{
-options(
- bcc_api_user = 178956728,
- bcc_api_pass = "cxynr4qyLLBw"
-)
-
-
-
-}
-
+Acceso directo a la operación \code{GetSeries} del API del Banco Central.
+Para la interfaz moderna use \code{\link[=get_series]{get_series()}}.
 }
