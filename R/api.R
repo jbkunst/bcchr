@@ -2,10 +2,10 @@
 
 #' Obtener los datos de una serie
 #'
-#' Acceso directo a la operación `GetSeries` de la API del Banco Central.
+#' Acceso directo a la operacion `GetSeries` de la API del Banco Central.
 #' Para la interfaz moderna use [get_series()].
 #'
-#' @param timeseries Código exacto de la serie.
+#' @param timeseries Codigo exacto de la serie.
 #' @param firstdate Fecha inicial opcional.
 #' @param lastdate Fecha final opcional.
 #' @param token Token de acceso a la API del Banco Central.
@@ -15,7 +15,7 @@
 bcch_GetSeries <- function(timeseries, firstdate = NULL, lastdate = NULL, token = NULL) {
 
   if (!is.character(timeseries) || length(timeseries) != 1 || !nzchar(timeseries)) {
-    stop("`timeseries` debe ser una cadena de texto no vacía.", call. = FALSE)
+    stop("`timeseries` debe ser una cadena de texto no vacia.", call. = FALSE)
   }
 
   if (!is.null(firstdate)) {
@@ -44,7 +44,7 @@ bcch_GetSeries <- function(timeseries, firstdate = NULL, lastdate = NULL, token 
 
 #' Obtener las series disponibles por frecuencia
 #'
-#' Acceso directo a la operación `SearchSeries` de la API del Banco Central.
+#' Acceso directo a la operacion `SearchSeries` de la API del Banco Central.
 #' Para la interfaz moderna use [metadata()] o [resolve_series()].
 #'
 #' @param frequency Frecuencia: `DAILY`, `MONTHLY`, `QUARTERLY` o `ANNUAL`.
