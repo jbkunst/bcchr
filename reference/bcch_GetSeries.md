@@ -1,60 +1,33 @@
-# Obtener los datos de series.
+# Obtener los datos de una serie
 
-Obtener los datos de series.
+Acceso directo a la operación `GetSeries` del API del Banco Central.
+Para la interfaz moderna use
+[`get_series()`](https://jkunst.com/bcchr/reference/get_series.md).
 
 ## Usage
 
 ``` r
-bcch_GetSeries(
-  timeseries = NULL,
-  user = getOption("bcc_api_user"),
-  pass = getOption("bcc_api_pass"),
-  firstdate = NULL,
-  lastdate = NULL
-)
+bcch_GetSeries(timeseries, firstdate = NULL, lastdate = NULL, token = NULL)
 ```
 
 ## Arguments
 
 - timeseries:
 
-  Código de la serie de tiempo a consultar (obligatorio).
-
-- user:
-
-  Nombre de usuario (obligatorio).
-
-- pass:
-
-  Contraseña (obligatorio).
+  Código exacto de la serie.
 
 - firstdate:
 
-  Fecha desde la cual se requiere recoger datos. Si el parámetro no está
-  presente, se recoge por defecto desde el primer dato disponible
-  (opcional).
+  Fecha inicial opcional.
 
 - lastdate:
 
-  Fecha hasta la cual se requiere recoger datos. Si el parámetro no está
-  presente, se recoge por defecto hasta el último dato disponible
-  (opcional).
+  Fecha final opcional.
 
-## Details
+- token:
 
-https://si3.bcentral.cl/estadisticas/Principal1/web_services/index.htm
+  Token del API del Banco Central.
 
-## Examples
+## Value
 
-``` r
-
-if (FALSE) { # \dontrun{
-options(
- bcc_api_user = 178956728,
- bcc_api_pass = "cxynr4qyLLBw"
-)
-
-
-
-} # }
-```
+Un tibble con los nombres originales entregados por el API.

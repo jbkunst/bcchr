@@ -5,14 +5,13 @@
 <url><loc>https://jkunst.com/bcchr/authors.html</loc></url>
 <url><loc>https://jkunst.com/bcchr/index.html</loc></url>
 <url><loc>https://jkunst.com/bcchr/news/index.html</loc></url>
-<url><loc>https://jkunst.com/bcchr/reference/as.ts.bcch_series.html</loc></url>
-<url><loc>https://jkunst.com/bcchr/reference/autoplot.bcch_series.html</loc></url>
-<url><loc>https://jkunst.com/bcchr/reference/bcch_CatalogoSeries.html</loc></url>
 <url><loc>https://jkunst.com/bcchr/reference/bcch_GetSeries.html</loc></url>
 <url><loc>https://jkunst.com/bcchr/reference/bcch_SearchSeries.html</loc></url>
-<url><loc>https://jkunst.com/bcchr/reference/bcch_calculo_var_porc.html</loc></url>
-<url><loc>https://jkunst.com/bcchr/reference/bcchseries.html</loc></url>
+<url><loc>https://jkunst.com/bcchr/reference/describe_series.html</loc></url>
+<url><loc>https://jkunst.com/bcchr/reference/get_series.html</loc></url>
 <url><loc>https://jkunst.com/bcchr/reference/index.html</loc></url>
-<url><loc>https://jkunst.com/bcchr/reference/reexports.html</loc></url>
+<url><loc>https://jkunst.com/bcchr/reference/metadata.html</loc></url>
+<url><loc>https://jkunst.com/bcchr/reference/plot_series.html</loc></url>
+<url><loc>https://jkunst.com/bcchr/reference/resolve_series.html</loc></url>
 </urlset>
 

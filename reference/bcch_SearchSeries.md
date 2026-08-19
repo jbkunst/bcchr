@@ -1,48 +1,26 @@
-# Obtener lista de series disponibles por frecuencia y su metadata.
+# Obtener las series disponibles por frecuencia
 
-Obtener lista de series disponibles por frecuencia y su metadata.
+Acceso directo a la operación `SearchSeries` del API del Banco Central.
+Para la interfaz moderna use
+[`metadata()`](https://jkunst.com/bcchr/reference/metadata.md) o
+[`resolve_series()`](https://jkunst.com/bcchr/reference/resolve_series.md).
 
 ## Usage
 
 ``` r
-bcch_SearchSeries(
-  frequency = NULL,
-  user = getOption("bcc_api_user"),
-  pass = getOption("bcc_api_pass")
-)
+bcch_SearchSeries(frequency, token = NULL)
 ```
 
 ## Arguments
 
 - frequency:
 
-  Frecuencia para la cual se quiere consultar el catálogo de series
-  disponibles. Puede tomar los valores DAILY, MONTHLY, QUARTERLY o
-  ANNUAL (obligatorio).
+  Frecuencia: `DAILY`, `MONTHLY`, `QUARTERLY` o `ANNUAL`.
 
-- user:
+- token:
 
-  Nombre de usuario (obligatorio).
+  Token del API del Banco Central.
 
-- pass:
+## Value
 
-  Contraseña (obligatorio).
-
-## Details
-
-https://si3.bcentral.cl/estadisticas/Principal1/web_services/index.htm
-
-## Examples
-
-``` r
-
-if (FALSE) { # \dontrun{
-options(
- bcc_api_user = 178956728,
- bcc_api_pass = "cxynr4qyLLBw"
-)
-
-bcch_SearchSeries("ANNUAL")
-
-} # }
-```
+Un tibble con los nombres originales entregados por el API.
