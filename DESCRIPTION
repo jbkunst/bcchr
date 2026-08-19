@@ -13,7 +13,6 @@ URL: https://jkunst.com/bcchr/, https://github.com/jbkunst/bcchr
 BugReports: https://github.com/jbkunst/bcchr/issues
 Imports:
     dplyr,
-    ggplot2,
     httr,
     jsonlite,
     lubridate,
@@ -21,6 +20,8 @@ Imports:
     readr,
     rlang,
     tibble
+Suggests:
+    ggplot2
 Depends:
     R (>= 4.1.0)
 Config/roxygen2/version: 8.0.0
