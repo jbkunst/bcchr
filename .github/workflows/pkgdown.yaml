@@ -41,13 +41,6 @@ jobs:
           sudo update-locale LANG=es_ES.UTF-8
         shell: bash
 
-      - name: Render README examples
-        if: github.event_name != 'pull_request'
-        shell: Rscript {0}
-        env:
-          LANG: es_ES.UTF-8
-        run: rmarkdown::render("README.Rmd", quiet = TRUE)
-
       - name: Build site
         shell: Rscript {0}
         env:
