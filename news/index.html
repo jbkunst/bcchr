@@ -16,6 +16,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -33,13 +34,43 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0" id="bcchr-010">bcchr 0.1.0<a class="anchor" aria-label="anchor" href="#bcchr-010"></a></h2>
+<div class="section level3">
+<h3 id="interfaz-moderna-0-1-0">Interfaz moderna<a class="anchor" aria-label="anchor" href="#interfaz-moderna-0-1-0"></a></h3>
+<ul><li>Nueva interfaz en <code>snake_case</code> para el flujo principal: <code><a href="../reference/metadata.html">metadata()</a></code>, <code><a href="../reference/resolve_series.html">resolve_series()</a></code>, <code><a href="../reference/describe_series.html">describe_series()</a></code> y <code><a href="../reference/get_series.html">get_series()</a></code>.</li>
+<li>
+<code><a href="../reference/resolve_series.html">resolve_series()</a></code> concentra la búsqueda por texto humano y devuelve candidatos; <code><a href="../reference/describe_series.html">describe_series()</a></code> y <code><a href="../reference/get_series.html">get_series()</a></code> trabajan con códigos exactos.</li>
+<li>
+<code><a href="../reference/get_series.html">get_series()</a></code> devuelve una estructura simple con <code>date</code>, <code>value</code> y <code>status_code</code>.</li>
+<li>
+<code><a href="../reference/metadata.html">metadata()</a></code> consulta el catálogo vigente del Banco Central en vez de depender de un catálogo empaquetado.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="api-y-autenticación-0-1-0">API y autenticación<a class="anchor" aria-label="anchor" href="#api-y-autenticaci%C3%B3n-0-1-0"></a></h3>
+<ul><li>Autenticación migrada a API token mediante <code>BCCH_TOKEN</code>, la opción <code>bcch_api_token</code> o el argumento <code>token</code>.</li>
+<li>
+<code><a href="../reference/bcch_GetSeries.html">bcch_GetSeries()</a></code> y <code><a href="../reference/bcch_SearchSeries.html">bcch_SearchSeries()</a></code> se mantienen como capa de bajo nivel que refleja las dos operaciones oficiales de la API.</li>
+<li>Cuando una búsqueda requiere consultar las cuatro frecuencias, el paquete lo informa. El mensaje puede desactivarse con <code>verbose = FALSE</code> o <code>options(bcchr.verbose = FALSE)</code>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="paquete-y-documentación-0-1-0">Paquete y documentación<a class="anchor" aria-label="anchor" href="#paquete-y-documentaci%C3%B3n-0-1-0"></a></h3>
+<ul><li>Se eliminan del core el catálogo empaquetado, helpers de transformación y métodos S3 antiguos. La versión completa anterior queda disponible en el tag <code>v0.0.2</code>.</li>
+<li>Se reducen las dependencias del core a <code>httr</code>, <code>jsonlite</code>, <code>rlang</code> y <code>tibble</code>.</li>
+<li>Se agrega <code><a href="../reference/plot_series.html">plot_series()</a></code> como helper opcional basado en <code>ggplot2</code>.</li>
+<li>README y referencia de pkgdown ahora priorizan la interfaz moderna y agrupan la API de bajo nivel al final.</li>
+<li>Se agrega la vignette <strong>Visualización con ggplot2</strong>, con un ejemplo inspirado en el dashboard de indicadores financieros: historia reciente, último valor, variación y fecha del último dato.</li>
+<li>Se actualiza la identidad visual de pkgdown con navy, azul y dorado inspirados en el Banco Central de Chile.</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.2" id="bcchr-002">bcchr 0.0.2<a class="anchor" aria-label="anchor" href="#bcchr-002"></a></h2>
 <ul><li>Fixed <code><a href="../reference/bcch_GetSeries.html">bcch_GetSeries()</a></code> JSON parsing for Banco Central responses encoded as <code>ISO-8859-1</code> by reading raw bytes, converting to <code>UTF-8</code>, and parsing with <code>jsonlite</code>.</li>
 <li>Added explicit Banco Central API error handling in <code><a href="../reference/bcch_GetSeries.html">bcch_GetSeries()</a></code>.</li>
 <li>Added <code>jsonlite</code> to <code>Imports</code>.</li>
 <li>Updated the minimum R version to 4.1.0 because the package uses the native pipe operator <code>|&gt;</code>.</li>
 </ul></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

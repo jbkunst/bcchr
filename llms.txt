@@ -177,3 +177,9 @@ Acceso directo a las operaciones oficiales del Banco Central.
 - [`bcch_SearchSeries()`](https://jkunst.com/bcchr/reference/bcch_SearchSeries.md)
   : Obtener las series disponibles por frecuencia
 
+# Articles
+
+### Visualizacion
+
+- [Visualización con
+  ggplot2](https://jkunst.com/bcchr/articles/ggplot.md):
