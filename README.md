@@ -1,101 +1,76 @@
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
 # bcchr
 
-<!-- badges: start -->
-
 [![R-CMD-check](https://github.com/jbkunst/bcchr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jbkunst/bcchr/actions/workflows/R-CMD-check.yaml)
-<!-- badges: end -->
 
-`bcchr` permite descubrir, describir y descargar series de la Base de Datos Estadísticos del Banco Central de Chile desde R.
+Cliente R pequeño para descubrir, describir y descargar series de la Base de Datos Estadísticos del Banco Central de Chile.
 
-La interfaz principal usa nombres simples en `snake_case` y devuelve tibbles con columnas consistentes. Las funciones de bajo nivel que reflejan directamente las operaciones oficiales `GetSeries` y `SearchSeries` siguen disponibles por compatibilidad.
-
-Más información sobre la API del Banco Central en <https://si3.bcentral.cl/estadisticas/Principal1/web_services/index.htm>.
+Documentación completa: <https://jkunst.com/bcchr/>
 
 ## Instalación
 
-``` r
-# install.packages("devtools")
-devtools::install_github("jbkunst/bcchr")
+```r
+# install.packages("remotes")
+remotes::install_github("jbkunst/bcchr")
 ```
 
 ## Autenticación
 
-La API REST del Banco Central requiere un token. Guárdelo en la variable de entorno `BCCH_TOKEN`, por ejemplo en su archivo `.Renviron`:
+La API REST del Banco Central requiere un token. La forma recomendada es guardarlo en `BCCH_TOKEN`, por ejemplo en `~/.Renviron`:
 
-``` text
+```text
 BCCH_TOKEN=su_token
 ```
 
-No guarde el token dentro de scripts ni lo suba a GitHub. Todos los ejemplos que consultan directamente la API requieren que `BCCH_TOKEN` esté configurado.
+Puede comprobar que R lo encuentra sin imprimirlo:
 
-Puede verificar que R lo encuentre sin imprimirlo:
-
-``` r
+```r
 nzchar(Sys.getenv("BCCH_TOKEN"))
 ```
 
-## Uso
+No guarde el token en scripts ni lo suba al repositorio.
 
-### Ejemplo completo: tasa de desempleo
+## Uso rápido
 
-Supongamos que queremos obtener la tasa de desempleo de Chile. En la BDE del Banco Central la serie se publica con el nombre **tasa de desocupación**, por lo que primero buscamos candidatos con `resolve_series()`:
+La interfaz principal sigue un flujo simple: buscar una serie, revisar su metadata y descargarla usando su código exacto.
 
-``` r
+```r
 library(bcchr)
 
-# Requiere BCCH_TOKEN configurado; ver Autenticación.
 candidatos <- resolve_series(
   "desocupacion",
   frequency = "MONTHLY"
 )
 
-candidatos |> head()
-```
-
-Entre los resultados está la serie nacional mensual no ajustada del INE, `F049.DES.TAS.INE9.10.M`. Una vez que conocemos el código exacto, podemos revisar su metadata:
-
-``` r
 serie <- "F049.DES.TAS.INE9.10.M"
 
 describe_series(serie)
-```
 
-Luego descargamos las observaciones. `get_series()` no interpreta nombres: recibe el código exacto y opcionalmente un rango de fechas.
-
-``` r
 desempleo <- get_series(
   serie,
   from = "2020-01-01"
 )
 
-tail(desempleo)
-```
-
-Y para una visualización rápida:
-
-``` r
 plot_series(desempleo)
 ```
 
-`plot_series()` devuelve un objeto `ggplot`, por lo que puede seguir agregando capas o temas de `ggplot2` normalmente.
+Para explorar el catálogo directamente:
 
-### Explorar el catálogo completo
-
-Cuando no tiene todavía un concepto específico para buscar, `metadata()` permite revisar el catálogo disponible. Si conoce la frecuencia, indicarla evita consultas innecesarias:
-
-``` r
+```r
 metadata("MONTHLY") |> head()
 ```
 
-Si no especifica una frecuencia, `metadata()` consulta `DAILY`, `MONTHLY`, `QUARTERLY` y `ANNUAL`. El paquete informa este comportamiento porque requiere cuatro requests. El mensaje puede desactivarse para una llamada con `verbose = FALSE` o globalmente con:
+## Interfaz
 
-``` r
-options(bcchr.verbose = FALSE)
-```
+- `metadata()`: descubre las series disponibles y su cobertura.
+- `resolve_series()`: busca candidatos a partir de texto humano.
+- `describe_series()`: describe un código exacto.
+- `get_series()`: descarga observaciones de un código exacto.
+- `plot_series()`: gráfico rápido opcional con `ggplot2`.
 
-## API de bajo nivel
+`bcch_GetSeries()` y `bcch_SearchSeries()` siguen disponibles como API de bajo nivel para trabajar directamente con las dos operaciones oficiales del Banco Central.
 
-`bcch_GetSeries()` y `bcch_SearchSeries()` se mantienen para quienes necesiten trabajar directamente con las dos operaciones oficiales del Banco Central y sus nombres de campos originales. Para código nuevo se recomienda la interfaz `metadata()` / `resolve_series()` / `describe_series()` / `get_series()`.
+## Desarrollo
+
+La versión actual es `0.1.0`. El paquete mantiene deliberadamente un core pequeño y evita clases, cachés y dependencias adicionales cuando no son necesarias.
+
+La versión anterior completa permanece disponible en el tag `v0.0.2`.
