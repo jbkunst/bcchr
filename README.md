@@ -29,7 +29,7 @@ La API REST del Banco Central requiere un token. Guárdelo en la variable de ent
 BCCH_TOKEN=su_token
 ```
 
-No guarde el token dentro de scripts ni lo suba a GitHub.
+No guarde el token dentro de scripts ni lo suba a GitHub. Todos los ejemplos que consultan directamente la API requieren que `BCCH_TOKEN` esté configurado.
 
 Puede verificar que R lo encuentre sin imprimirlo:
 
@@ -46,6 +46,7 @@ nzchar(Sys.getenv("BCCH_TOKEN"))
 ``` r
 library(bcchr)
 
+# Requiere BCCH_TOKEN configurado; ver Autenticación.
 metadata("MONTHLY") |> head()
 ```
 
@@ -60,6 +61,7 @@ options(bcchr.verbose = FALSE)
 `resolve_series()` busca candidatos a partir de texto humano, pero no elige una serie por el usuario:
 
 ``` r
+# Requiere BCCH_TOKEN configurado; ver Autenticación.
 resolve_series(
   "imacec",
   frequency = "MONTHLY"
@@ -71,6 +73,7 @@ resolve_series(
 Cuando ya conoce el código exacto, `describe_series()` devuelve su metadata:
 
 ``` r
+# Requiere BCCH_TOKEN configurado; ver Autenticación.
 describe_series("F073.TCO.PRE.Z.D")
 ```
 
@@ -79,6 +82,7 @@ describe_series("F073.TCO.PRE.Z.D")
 `get_series()` recibe un código exacto y un rango opcional de fechas. No intenta interpretar nombres ni resolver series:
 
 ``` r
+# Requiere BCCH_TOKEN configurado; ver Autenticación.
 dolar <- get_series(
   "F073.TCO.PRE.Z.D",
   from = "2026-01-01",
@@ -102,6 +106,7 @@ El resultado usa una estructura pequeña y predecible:
 `plot_series()` es un helper opcional. `ggplot2` solo se necesita al usar esta función:
 
 ``` r
+# Este ejemplo usa `dolar`, obtenido previamente con get_series().
 plot_series(dolar)
 ```
 
