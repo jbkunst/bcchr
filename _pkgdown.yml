@@ -46,3 +46,8 @@ reference:
     contents:
       - bcch_GetSeries
       - bcch_SearchSeries
+
+articles:
+  - title: Visualizacion
+    contents:
+      - ggplot

@@ -17,7 +17,10 @@ Imports:
     rlang,
     tibble
 Suggests:
-    ggplot2
+    ggplot2,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
 Depends:
     R (>= 4.1.0)
 Config/roxygen2/version: 8.1.0
