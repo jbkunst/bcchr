@@ -24,7 +24,7 @@
 
     <a class="navbar-brand me-2" href="index.html">bcchr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Cambiar la navegación">
@@ -53,7 +53,7 @@
 <div class="page-header"><h1 id="bcchr">bcchr<a class="anchor" aria-label="anchor" href="#bcchr"></a>
 </h1></div>
 <p><code>bcchr</code> es una interfaz pequeña para trabajar desde R con la Base de Datos Estadísticos del Banco Central de Chile.</p>
-<p>El paquete separa deliberadamente cuatro tareas: <strong>descubrir</strong>, <strong>resolver</strong>, <strong>describir</strong> y <strong>descargar</strong> series. Las funciones devuelven tibbles simples y usan códigos exactos cuando corresponde.</p>
+<p>El paquete separa deliberadamente cuatro tareas: <strong>descubrir</strong>, <strong>resolver</strong>, <strong>describir</strong> y <strong>descargar</strong> series. Las funciones aceptan uno o varios valores, devuelven tibbles simples y usan códigos exactos cuando corresponde.</p>
 <div class="section level2">
 <h2 id="autenticación">Autenticación<a class="anchor" aria-label="anchor" href="#autenticaci%C3%B3n"></a>
 </h2>
@@ -65,6 +65,10 @@
 <h2 id="flujo-principal">Flujo principal<a class="anchor" aria-label="anchor" href="#flujo-principal"></a>
 </h2>
 <table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
 <thead><tr>
 <th>Función</th>
 <th>Para qué sirve</th>
@@ -76,15 +80,15 @@
 </tr>
 <tr>
 <td><code><a href="reference/resolve_series.html">resolve_series()</a></code></td>
-<td>Buscar candidatos desde texto humano</td>
+<td>Buscar candidatos desde uno o varios textos</td>
 </tr>
 <tr>
 <td><code><a href="reference/describe_series.html">describe_series()</a></code></td>
-<td>Revisar la metadata de un código exacto</td>
+<td>Revisar la metadata de uno o varios códigos exactos</td>
 </tr>
 <tr>
 <td><code><a href="reference/get_series.html">get_series()</a></code></td>
-<td>Descargar observaciones de un código exacto</td>
+<td>Descargar una o varias series en formato largo</td>
 </tr>
 <tr>
 <td><code><a href="reference/plot_series.html">plot_series()</a></code></td>
@@ -122,16 +126,25 @@
 <p>Y para una inspección rápida:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/plot_series.html">plot_series</a></span><span class="op">(</span><span class="va">desempleo</span><span class="op">)</span></span></code></pre></div>
+<p>También se pueden descargar varias series en una sola llamada:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">indicadores</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_series.html">get_series</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"F073.TCO.PRE.Z.D"</span>, <span class="st">"F073.UFF.PRE.Z.D"</span><span class="op">)</span>,</span>
+<span>  from <span class="op">=</span> <span class="st">"2025-01-01"</span>,</span>
+<span>  to <span class="op">=</span> <span class="st">"2025-03-31"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/plot_series.html">plot_series</a></span><span class="op">(</span><span class="va">indicadores</span><span class="op">)</span></span></code></pre></div>
 <p>Para un ejemplo ejecutado y una personalización con <code>ggplot2</code>, vea <a href="articles/ggplot.html">Visualización con ggplot2</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="explorar-el-catálogo">Explorar el catálogo<a class="anchor" aria-label="anchor" href="#explorar-el-cat%C3%A1logo"></a>
 </h2>
 <p>Si ya conoce la frecuencia, especificarla evita consultas innecesarias:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/metadata.html">metadata</a></span><span class="op">(</span><span class="st">"MONTHLY"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Sin frecuencia, <code><a href="reference/metadata.html">metadata()</a></code> consulta <code>DAILY</code>, <code>MONTHLY</code>, <code>QUARTERLY</code> y <code>ANNUAL</code>. Puede silenciar el aviso con <code>verbose = FALSE</code> o globalmente con:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>bcchr.verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">

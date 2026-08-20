@@ -18,7 +18,7 @@ metadata(
 
 - frequency:
 
-  Filtro opcional de frecuencia. Puede ser `DAILY`, `MONTHLY`,
+  Vector opcional de frecuencias. Puede contener `DAILY`, `MONTHLY`,
   `QUARTERLY` o `ANNUAL`. Si se omite, devuelve todas las frecuencias.
 
 - token:
@@ -35,3 +35,23 @@ metadata(
 
 Un tibble con la metadata de las series y nombres de columnas en
 snake_case.
+
+## Ejemplos
+
+``` r
+if (nzchar(Sys.getenv("BCCH_TOKEN"))) {
+  metadata(c("MONTHLY", "QUARTERLY"), verbose = FALSE) |>
+    head()
+}
+#> # A tibble: 6 × 8
+#>   series_id           frequency spanish_title    english_title first_observation
+#>   <chr>               <chr>     <chr>            <chr>         <date>           
+#> 1 G073.IPC.IND.2018.M MONTHLY   IPC General his… Historical H… 1989-04-01       
+#> 2 G073.IPC.IND.2023.M MONTHLY   General (empalm… Headline (CB… 1998-12-01       
+#> 3 G073.IPC.V12.2018.M MONTHLY   IPC General his… Historical H… 1990-04-01       
+#> 4 G073.IPC.V12.2023.M MONTHLY   General (empalm… Headline (CB… 1999-12-01       
+#> 5 G073.IPC.VAR.2018.M MONTHLY   IPC General his… Historical H… 1989-05-01       
+#> 6 G073.IPC.VAR.2023.M MONTHLY   General (empalm… Headline (CB… 1999-01-01       
+#> # ℹ 3 more variables: last_observation <date>, updated_at <date>,
+#> #   created_at <date>
+```

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">bcchr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Cambiar la navegación">
@@ -30,9 +30,18 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Registro de cambios</h1>
-      <small>Código: <a href="https://github.com/jbkunst/bcchr/blob/v0.1.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Código: <a href="https://github.com/jbkunst/bcchr/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0.9000" id="bcchr-0109000">bcchr 0.1.0.9000<a class="anchor" aria-label="anchor" href="#bcchr-0109000"></a></h2>
+<ul><li>
+<code><a href="../reference/metadata.html">metadata()</a></code>, <code><a href="../reference/resolve_series.html">resolve_series()</a></code>, <code><a href="../reference/describe_series.html">describe_series()</a></code> y <code><a href="../reference/get_series.html">get_series()</a></code> ahora aceptan vectores. Las consultas de varias series reutilizan la metadata y devuelven resultados en formato largo.</li>
+<li>
+<code><a href="../reference/get_series.html">get_series()</a></code> agrega <code>series_id</code> a su resultado y respeta el limite oficial de cinco consultas de series por segundo.</li>
+<li>
+<code><a href="../reference/plot_series.html">plot_series()</a></code> separa automaticamente varias series y la referencia de pkgdown incorpora ejemplos ejecutables cuando <code>BCCH_TOKEN</code> esta disponible.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="bcchr-010">bcchr 0.1.0<a class="anchor" aria-label="anchor" href="#bcchr-010"></a></h2>
 <div class="section level3">

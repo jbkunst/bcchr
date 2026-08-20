@@ -11,7 +11,7 @@ cobertura temporal."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">bcchr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Cambiar la navegación">
@@ -34,7 +34,7 @@ cobertura temporal."></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Metadata de las series</h1>
-      <small class="dont-index">Código: <a href="https://github.com/jbkunst/bcchr/blob/v0.1.0/R/interface.R" class="external-link"><code>R/interface.R</code></a></small>
+      <small class="dont-index">Código: <a href="https://github.com/jbkunst/bcchr/blob/main/R/interface.R" class="external-link"><code>R/interface.R</code></a></small>
       <div class="d-none name"><code>metadata.Rd</code></div>
     </div>
 
@@ -58,8 +58,9 @@ cobertura temporal.</p>
 
 
 <dl><dt id="arg-frequency">frequency<a class="anchor" aria-label="anchor" href="#arg-frequency"></a></dt>
-<dd><p>Filtro opcional de frecuencia. Puede ser <code>DAILY</code>, <code>MONTHLY</code>,
-<code>QUARTERLY</code> o <code>ANNUAL</code>. Si se omite, devuelve todas las frecuencias.</p></dd>
+<dd><p>Vector opcional de frecuencias. Puede contener <code>DAILY</code>,
+<code>MONTHLY</code>, <code>QUARTERLY</code> o <code>ANNUAL</code>. Si se omite, devuelve todas las
+frecuencias.</p></dd>
 
 
 <dt id="arg-token">token<a class="anchor" aria-label="anchor" href="#arg-token"></a></dt>
@@ -77,6 +78,25 @@ frecuencias. Por defecto usa la opcion <code>bcchr.verbose</code> y luego <code>
     <p>Un tibble con la metadata de las series y nombres de columnas en snake_case.</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Ejemplos<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nzchar</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"BCCH_TOKEN"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu">metadata</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"MONTHLY"</span>, <span class="st">"QUARTERLY"</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 8</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   series_id           frequency spanish_title    english_title first_observation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> G073.IPC.IND.2018.M MONTHLY   IPC General his… Historical H… 1989-04-01       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> G073.IPC.IND.2023.M MONTHLY   General (empalm… Headline (CB… 1998-12-01       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> G073.IPC.V12.2018.M MONTHLY   IPC General his… Historical H… 1990-04-01       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> G073.IPC.V12.2023.M MONTHLY   General (empalm… Headline (CB… 1999-12-01       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> G073.IPC.VAR.2018.M MONTHLY   IPC General his… Historical H… 1989-05-01       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> G073.IPC.VAR.2023.M MONTHLY   General (empalm… Headline (CB… 1999-01-01       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 3 more variables: last_observation &lt;date&gt;, updated_at &lt;date&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   created_at &lt;date&gt;</span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Índice de contenidos"><h2>En esta página</h2>
     </nav></aside></div>
 

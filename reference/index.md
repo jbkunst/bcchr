@@ -11,12 +11,12 @@ Funciones principales para descubrir, describir y descargar series.
 - [`describe_series()`](https://jkunst.com/bcchr/reference/describe_series.md)
   : Describir una serie del Banco Central
 - [`get_series()`](https://jkunst.com/bcchr/reference/get_series.md) :
-  Get observations for one Banco Central series
+  Obtener observaciones de series del Banco Central
 
 ## Visualizacion
 
 - [`plot_series()`](https://jkunst.com/bcchr/reference/plot_series.md) :
-  Plot a Banco Central series
+  Graficar series del Banco Central
 
 ## API de bajo nivel / legacy
 

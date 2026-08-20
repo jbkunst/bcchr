@@ -1,9 +1,9 @@
-# Plot a Banco Central series
+# Graficar series del Banco Central
 
-Plot a data frame returned by
-[`get_series()`](https://jkunst.com/bcchr/reference/get_series.md). This
-is a small convenience helper; it does not add classes or modify the
-data.
+Grafica un data frame devuelto por
+[`get_series()`](https://jkunst.com/bcchr/reference/get_series.md).
+Cuando contiene varias series, usa `series_id` para separarlas. Es una
+ayuda pequeña de visualizacion: no agrega clases ni modifica los datos.
 
 ## Uso
 
@@ -15,10 +15,24 @@ plot_series(x)
 
 - x:
 
-  A data frame returned by
-  [`get_series()`](https://jkunst.com/bcchr/reference/get_series.md)
-  with `date` and `value` columns.
+  Data frame devuelto por
+  [`get_series()`](https://jkunst.com/bcchr/reference/get_series.md) con
+  las columnas `date` y `value`.
 
 ## Valor
 
-A ggplot object.
+Un objeto ggplot.
+
+## Ejemplos
+
+``` r
+if (nzchar(Sys.getenv("BCCH_TOKEN"))) {
+  indicators <- get_series(
+    c("F073.TCO.PRE.Z.D", "F073.UFF.PRE.Z.D"),
+    from = "2025-01-01",
+    to = "2025-03-31"
+  )
+
+  plot_series(indicators)
+}
+```

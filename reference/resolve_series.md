@@ -1,8 +1,8 @@
 # Resolver una descripcion a series del Banco Central
 
-Busca en el catalogo del Banco Central usando un termino legible por una
-persona y devuelve las series candidatas. Esta funcion solo encuentra
-candidatos; no elige una serie por el usuario.
+Busca en el catalogo del Banco Central usando uno o varios terminos
+legibles por una persona y devuelve las series candidatas. Esta funcion
+solo encuentra candidatos; no elige una serie por el usuario.
 
 ## Uso
 
@@ -19,7 +19,8 @@ resolve_series(
 
 - query:
 
-  Texto a buscar, por ejemplo `"imacec"` o `"dolar observado"`.
+  Vector de textos a buscar, por ejemplo `"imacec"` o
+  `c("dolar observado", "unidad de fomento")`.
 
 - frequency:
 
@@ -37,4 +38,25 @@ resolve_series(
 
 ## Valor
 
-Un tibble con todas las series candidatas encontradas.
+Un tibble con todas las series candidatas encontradas y una columna
+`query` que identifica el texto que produjo cada resultado.
+
+## Ejemplos
+
+``` r
+if (nzchar(Sys.getenv("BCCH_TOKEN"))) {
+  candidates <- resolve_series(
+    c("dolar observado", "unidad de fomento"),
+    frequency = "DAILY",
+    verbose = FALSE
+  )
+
+  candidates[c("query", "series_id", "frequency", "spanish_title")] |>
+    head()
+}
+#> # A tibble: 2 × 4
+#>   query             series_id        frequency spanish_title                    
+#>   <chr>             <chr>            <chr>     <chr>                            
+#> 1 dolar observado   F073.TCO.PRE.Z.D DAILY     "Tipo de cambio nominal (dólar o…
+#> 2 unidad de fomento F073.UFF.PRE.Z.D DAILY     "Unidad de fomento (UF)"         
+```

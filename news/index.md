@@ -1,5 +1,20 @@
 # Registro de cambios
 
+## bcchr 0.1.0.9000
+
+- [`metadata()`](https://jkunst.com/bcchr/reference/metadata.md),
+  [`resolve_series()`](https://jkunst.com/bcchr/reference/resolve_series.md),
+  [`describe_series()`](https://jkunst.com/bcchr/reference/describe_series.md)
+  y [`get_series()`](https://jkunst.com/bcchr/reference/get_series.md)
+  ahora aceptan vectores. Las consultas de varias series reutilizan la
+  metadata y devuelven resultados en formato largo.
+- [`get_series()`](https://jkunst.com/bcchr/reference/get_series.md)
+  agrega `series_id` a su resultado y respeta el limite oficial de cinco
+  consultas de series por segundo.
+- [`plot_series()`](https://jkunst.com/bcchr/reference/plot_series.md)
+  separa automaticamente varias series y la referencia de pkgdown
+  incorpora ejemplos ejecutables cuando `BCCH_TOKEN` esta disponible.
+
 ## bcchr 0.1.0
 
 ### Interfaz moderna

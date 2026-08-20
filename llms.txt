@@ -5,7 +5,8 @@ Datos Estadísticos del Banco Central de Chile.
 
 El paquete separa deliberadamente cuatro tareas: **descubrir**,
 **resolver**, **describir** y **descargar** series. Las funciones
-devuelven tibbles simples y usan códigos exactos cuando corresponde.
+aceptan uno o varios valores, devuelven tibbles simples y usan códigos
+exactos cuando corresponde.
 
 ## Autenticación
 
@@ -23,9 +24,9 @@ No guarde el token dentro de scripts ni lo publique en GitHub.
 | Función | Para qué sirve |
 |----|----|
 | [`metadata()`](https://jkunst.com/bcchr/reference/metadata.md) | Explorar las series disponibles |
-| [`resolve_series()`](https://jkunst.com/bcchr/reference/resolve_series.md) | Buscar candidatos desde texto humano |
-| [`describe_series()`](https://jkunst.com/bcchr/reference/describe_series.md) | Revisar la metadata de un código exacto |
-| [`get_series()`](https://jkunst.com/bcchr/reference/get_series.md) | Descargar observaciones de un código exacto |
+| [`resolve_series()`](https://jkunst.com/bcchr/reference/resolve_series.md) | Buscar candidatos desde uno o varios textos |
+| [`describe_series()`](https://jkunst.com/bcchr/reference/describe_series.md) | Revisar la metadata de uno o varios códigos exactos |
+| [`get_series()`](https://jkunst.com/bcchr/reference/get_series.md) | Descargar una o varias series en formato largo |
 | [`plot_series()`](https://jkunst.com/bcchr/reference/plot_series.md) | Hacer un gráfico rápido con `ggplot2` |
 
 ## Ejemplo: tasa de desempleo
@@ -68,6 +69,19 @@ Y para una inspección rápida:
 ``` r
 
 plot_series(desempleo)
+```
+
+También se pueden descargar varias series en una sola llamada:
+
+``` r
+
+indicadores <- get_series(
+  c("F073.TCO.PRE.Z.D", "F073.UFF.PRE.Z.D"),
+  from = "2025-01-01",
+  to = "2025-03-31"
+)
+
+plot_series(indicadores)
 ```
 
 Para un ejemplo ejecutado y una personalización con `ggplot2`, vea
@@ -115,12 +129,12 @@ Funciones principales para descubrir, describir y descargar series.
 - [`describe_series()`](https://jkunst.com/bcchr/reference/describe_series.md)
   : Describir una serie del Banco Central
 - [`get_series()`](https://jkunst.com/bcchr/reference/get_series.md) :
-  Get observations for one Banco Central series
+  Obtener observaciones de series del Banco Central
 
 ## Visualizacion
 
 - [`plot_series()`](https://jkunst.com/bcchr/reference/plot_series.md) :
-  Plot a Banco Central series
+  Graficar series del Banco Central
 
 ## API de bajo nivel / legacy
 
