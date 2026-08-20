@@ -59,6 +59,17 @@ candidatos <- resolve_series(
 )
 
 candidatos |> head()
+#> # A tibble: 6 × 8
+#>   series_id              frequency spanish_title english_title first_observation
+#>   <chr>                  <chr>     <chr>         <chr>         <date>           
+#> 1 F049.DES.TAS.HIST.10.M MONTHLY   Tasas de des… Unemployment… 1986-02-01       
+#> 2 F049.DES.TAS.INE.02.M  MONTHLY   Tasa de deso… Unemployment… 2010-03-01       
+#> 3 F049.DES.TAS.INE.03.M  MONTHLY   Tasa de deso… Unemployment… 2010-03-01       
+#> 4 F049.DES.TAS.INE.10.M  MONTHLY   Tasa de deso… Unemployment… 2010-03-01       
+#> 5 F049.DES.TAS.INE.D02.M MONTHLY   Tasa de deso… Unemployment… 2010-03-01       
+#> 6 F049.DES.TAS.INE.D03.M MONTHLY   Tasa de deso… Unemployment… 2010-03-01       
+#> # ℹ 3 more variables: last_observation <date>, updated_at <date>,
+#> #   created_at <date>
 ```
 
 Entre los resultados está la serie nacional mensual no ajustada del INE,
@@ -70,6 +81,14 @@ podemos revisar su metadata:
 serie <- "F049.DES.TAS.INE9.10.M"
 
 describe_series(serie)
+#> Consultando las 4 frecuencias del Banco Central; esto puede tardar unos
+#> segundos.
+#> # A tibble: 1 × 8
+#>   series_id              frequency spanish_title english_title first_observation
+#>   <chr>                  <chr>     <chr>         <chr>         <date>           
+#> 1 F049.DES.TAS.INE9.10.M MONTHLY   Tasa de deso… Unemployment… 2010-03-01       
+#> # ℹ 3 more variables: last_observation <date>, updated_at <date>,
+#> #   created_at <date>
 ```
 
 Luego descargamos las observaciones.
@@ -85,6 +104,15 @@ desempleo <- get_series(
 )
 
 tail(desempleo)
+#> # A tibble: 6 × 3
+#>   date       value status_code
+#>   <date>     <dbl> <chr>      
+#> 1 2026-01-01  8.28 OK         
+#> 2 2026-02-01  8.33 OK         
+#> 3 2026-03-01  8.93 OK         
+#> 4 2026-04-01  9.11 OK         
+#> 5 2026-05-01  9.44 OK         
+#> 6 2026-06-01  9.44 OK
 ```
 
 Y para una visualización rápida:
@@ -93,6 +121,8 @@ Y para una visualización rápida:
 
 plot_series(desempleo)
 ```
+
+![](reference/figures/README-unnamed-chunk-5-1.png)
 
 [`plot_series()`](https://jkunst.com/bcchr/reference/plot_series.md)
 devuelve un objeto `ggplot`, por lo que puede seguir agregando capas o
@@ -108,6 +138,17 @@ consultas innecesarias:
 ``` r
 
 metadata("MONTHLY") |> head()
+#> # A tibble: 6 × 8
+#>   series_id           frequency spanish_title    english_title first_observation
+#>   <chr>               <chr>     <chr>            <chr>         <date>           
+#> 1 G073.IPC.IND.2018.M MONTHLY   IPC General his… Historical H… 1989-04-01       
+#> 2 G073.IPC.IND.2023.M MONTHLY   General (empalm… Headline (CB… 1998-12-01       
+#> 3 G073.IPC.V12.2018.M MONTHLY   IPC General his… Historical H… 1990-04-01       
+#> 4 G073.IPC.V12.2023.M MONTHLY   General (empalm… Headline (CB… 1999-12-01       
+#> 5 G073.IPC.VAR.2018.M MONTHLY   IPC General his… Historical H… 1989-05-01       
+#> 6 G073.IPC.VAR.2023.M MONTHLY   General (empalm… Headline (CB… 1999-01-01       
+#> # ℹ 3 more variables: last_observation <date>, updated_at <date>,
+#> #   created_at <date>
 ```
 
 Si no especifica una frecuencia,
