@@ -8,7 +8,7 @@
 [![R-CMD-check](https://github.com/jbkunst/bcchr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jbkunst/bcchr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-`bcchr` permite descubrir, describir y descargar series de la Base de Datos Estadisticos del Banco Central de Chile desde R.
+`bcchr` permite descubrir, describir y descargar series de la Base de Datos Estadísticos del Banco Central de Chile desde R.
 
 La interfaz principal usa nombres simples en `snake_case` y devuelve tibbles con columnas consistentes. Las funciones de bajo nivel que reflejan directamente las operaciones oficiales `GetSeries` y `SearchSeries` siguen disponibles por compatibilidad.
 
@@ -39,78 +39,62 @@ nzchar(Sys.getenv("BCCH_TOKEN"))
 
 ## Uso
 
-### Explorar el catálogo
+### Ejemplo completo: tasa de desempleo
 
-`metadata()` devuelve las series disponibles y su metadata. Si conoce la frecuencia, indicarla evita consultas innecesarias:
+Supongamos que queremos obtener la tasa de desempleo de Chile. En la BDE del Banco Central la serie se publica con el nombre **tasa de desocupación**, por lo que primero buscamos candidatos con `resolve_series()`:
 
 ``` r
 library(bcchr)
 
 # Requiere BCCH_TOKEN configurado; ver Autenticación.
+candidatos <- resolve_series(
+  "desocupacion",
+  frequency = "MONTHLY"
+)
+
+candidatos |> head()
+```
+
+Entre los resultados está la serie nacional mensual no ajustada del INE, `F049.DES.TAS.INE9.10.M`. Una vez que conocemos el código exacto, podemos revisar su metadata:
+
+``` r
+serie <- "F049.DES.TAS.INE9.10.M"
+
+describe_series(serie)
+```
+
+Luego descargamos las observaciones. `get_series()` no interpreta nombres: recibe el código exacto y opcionalmente un rango de fechas.
+
+``` r
+desempleo <- get_series(
+  serie,
+  from = "2020-01-01"
+)
+
+tail(desempleo)
+```
+
+Y para una visualización rápida:
+
+``` r
+plot_series(desempleo)
+```
+
+`plot_series()` devuelve un objeto `ggplot`, por lo que puede seguir agregando capas o temas de `ggplot2` normalmente.
+
+### Explorar el catálogo completo
+
+Cuando no tiene todavía un concepto específico para buscar, `metadata()` permite revisar el catálogo disponible. Si conoce la frecuencia, indicarla evita consultas innecesarias:
+
+``` r
 metadata("MONTHLY") |> head()
 ```
 
-Si no especifica una frecuencia, `metadata()` consulta `DAILY`, `MONTHLY`, `QUARTERLY` y `ANNUAL`. El paquete informa este comportamiento porque requiere cuatro requests. El mensaje puede desactivarse con:
+Si no especifica una frecuencia, `metadata()` consulta `DAILY`, `MONTHLY`, `QUARTERLY` y `ANNUAL`. El paquete informa este comportamiento porque requiere cuatro requests. El mensaje puede desactivarse para una llamada con `verbose = FALSE` o globalmente con:
 
 ``` r
 options(bcchr.verbose = FALSE)
 ```
-
-### Buscar una serie
-
-`resolve_series()` busca candidatos a partir de texto humano, pero no elige una serie por el usuario:
-
-``` r
-# Requiere BCCH_TOKEN configurado; ver Autenticación.
-resolve_series(
-  "imacec",
-  frequency = "MONTHLY"
-)
-```
-
-### Describir una serie
-
-Cuando ya conoce el código exacto, `describe_series()` devuelve su metadata:
-
-``` r
-# Requiere BCCH_TOKEN configurado; ver Autenticación.
-describe_series("F073.TCO.PRE.Z.D")
-```
-
-### Descargar observaciones
-
-`get_series()` recibe un código exacto y un rango opcional de fechas. No intenta interpretar nombres ni resolver series:
-
-``` r
-# Requiere BCCH_TOKEN configurado; ver Autenticación.
-dolar <- get_series(
-  "F073.TCO.PRE.Z.D",
-  from = "2026-01-01",
-  to = "2026-02-01"
-)
-
-dolar
-```
-
-El resultado usa una estructura pequeña y predecible:
-
-``` text
-# A tibble: ... x 3
-  date       value status_code
-  <date>     <dbl> <chr>
-  ...
-```
-
-### Graficar
-
-`plot_series()` es un helper opcional. `ggplot2` solo se necesita al usar esta función:
-
-``` r
-# Este ejemplo usa `dolar`, obtenido previamente con get_series().
-plot_series(dolar)
-```
-
-Si `ggplot2` no está instalado, `rlang` ofrecerá instalarlo en sesiones interactivas.
 
 ## API de bajo nivel
 
