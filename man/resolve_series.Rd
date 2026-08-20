@@ -2,22 +2,30 @@
 % Please edit documentation in R/interface.R
 \name{resolve_series}
 \alias{resolve_series}
-\title{Resolve a human description to Banco Central series}
+\title{Resolver una descripcion a series del Banco Central}
 \usage{
-resolve_series(query, frequency = NULL, token = NULL)
+resolve_series(
+  query,
+  frequency = NULL,
+  token = NULL,
+  verbose = getOption("bcchr.verbose", TRUE)
+)
 }
 \arguments{
-\item{query}{Text to search for, such as \code{"imacec"} or \code{"dolar observado"}.}
+\item{query}{Texto a buscar, por ejemplo \code{"imacec"} o \code{"dolar observado"}.}
 
-\item{frequency}{Optional frequency filter passed to \code{\link[=metadata]{metadata()}}.}
+\item{frequency}{Filtro opcional de frecuencia pasado a \code{\link[=metadata]{metadata()}}.}
 
-\item{token}{Banco Central REST API token.}
+\item{token}{Token de acceso a la API REST del Banco Central.}
+
+\item{verbose}{Si es \code{TRUE}, informa cuando se consultan las cuatro
+frecuencias. Por defecto usa la opcion \code{bcchr.verbose} y luego \code{TRUE}.}
 }
 \value{
-A tibble with every matching series candidate.
+Un tibble con todas las series candidatas encontradas.
 }
 \description{
-Search the Banco Central catalog using a human-readable term and return the
-matching series candidates. This function finds candidates only; it does not
-choose a series on the user's behalf.
+Busca en el catalogo del Banco Central usando un termino legible por una
+persona y devuelve las series candidatas. Esta funcion solo encuentra
+candidatos; no elige una serie por el usuario.
 }
