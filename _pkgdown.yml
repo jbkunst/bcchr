@@ -26,3 +26,22 @@ template:
 navbar:
   bg: primary
   type: dark
+
+reference:
+  - title: Interfaz moderna
+    desc: Funciones principales para descubrir, describir y descargar series.
+    contents:
+      - metadata
+      - resolve_series
+      - describe_series
+      - get_series
+
+  - title: Visualizacion
+    contents:
+      - plot_series
+
+  - title: API de bajo nivel / legacy
+    desc: Acceso directo a las operaciones oficiales del Banco Central.
+    contents:
+      - bcch_GetSeries
+      - bcch_SearchSeries
