@@ -63,7 +63,7 @@ Supongamos que queremos obtener la tasa de desempleo de Chile. En la BDE del
 Banco Central la serie se publica con el nombre **tasa de desocupación**, por lo
 que primero buscamos candidatos con `resolve_series()`:
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 library(bcchr)
 
 # Requiere BCCH_TOKEN configurado; ver Autenticación.
@@ -79,7 +79,7 @@ Entre los resultados está la serie nacional mensual no ajustada del INE,
 `F049.DES.TAS.INE9.10.M`. Una vez que conocemos el código exacto, podemos revisar
 su metadata:
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 serie <- "F049.DES.TAS.INE9.10.M"
 
 describe_series(serie)
@@ -88,7 +88,7 @@ describe_series(serie)
 Luego descargamos las observaciones. `get_series()` no interpreta nombres: recibe
 el código exacto y opcionalmente un rango de fechas.
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 desempleo <- get_series(
   serie,
   from = "2020-01-01"
@@ -99,7 +99,7 @@ tail(desempleo)
 
 Y para una visualización rápida:
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 plot_series(desempleo)
 ```
 
@@ -112,7 +112,7 @@ Cuando no tiene todavía un concepto específico para buscar, `metadata()` permi
 revisar el catálogo disponible. Si conoce la frecuencia, indicarla evita
 consultas innecesarias:
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 metadata("MONTHLY") |> head()
 ```
 
@@ -121,7 +121,7 @@ Si no especifica una frecuencia, `metadata()` consulta `DAILY`, `MONTHLY`,
 cuatro requests. El mensaje puede desactivarse para una llamada con
 `verbose = FALSE` o globalmente con:
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 options(bcchr.verbose = FALSE)
 ```
 
