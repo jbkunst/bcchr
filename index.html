@@ -52,118 +52,92 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="bcchr">bcchr<a class="anchor" aria-label="anchor" href="#bcchr"></a>
 </h1></div>
-<!-- badges: start -->
-
-<p><code>bcchr</code> permite descubrir, describir y descargar series de la Base de Datos Estadísticos del Banco Central de Chile desde R.</p>
-<p>La interfaz principal usa nombres simples en <code>snake_case</code> y devuelve tibbles con columnas consistentes. Las funciones de bajo nivel que reflejan directamente las operaciones oficiales <code>GetSeries</code> y <code>SearchSeries</code> siguen disponibles por compatibilidad.</p>
-<p>Más información sobre la API del Banco Central en <a href="https://si3.bcentral.cl/estadisticas/Principal1/web_services/index.htm" class="external-link uri">https://si3.bcentral.cl/estadisticas/Principal1/web_services/index.htm</a>.</p>
-<div class="section level2">
-<h2 id="instalación">Instalación<a class="anchor" aria-label="anchor" href="#instalaci%C3%B3n"></a>
-</h2>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"jbkunst/bcchr"</span><span class="op">)</span></span></code></pre></div>
-</div>
+<p><code>bcchr</code> es una interfaz pequeña para trabajar desde R con la Base de Datos Estadísticos del Banco Central de Chile.</p>
+<p>El paquete separa deliberadamente cuatro tareas: <strong>descubrir</strong>, <strong>resolver</strong>, <strong>describir</strong> y <strong>descargar</strong> series. Las funciones devuelven tibbles simples y usan códigos exactos cuando corresponde.</p>
 <div class="section level2">
 <h2 id="autenticación">Autenticación<a class="anchor" aria-label="anchor" href="#autenticaci%C3%B3n"></a>
 </h2>
-<p>La API REST del Banco Central requiere un token. Guárdelo en la variable de entorno <code>BCCH_TOKEN</code>, por ejemplo en su archivo <code>.Renviron</code>:</p>
+<p>La API REST del Banco Central requiere un token. Guárdelo en la variable de entorno <code>BCCH_TOKEN</code>:</p>
 <pre class="text"><code><span><span class="va">BCCH_TOKEN</span><span class="op">=</span><span class="va">su_token</span></span></code></pre>
-<p>No guarde el token dentro de scripts ni lo suba a GitHub. Todos los ejemplos que consultan directamente la API requieren que <code>BCCH_TOKEN</code> esté configurado.</p>
-<p>Puede verificar que R lo encuentre sin imprimirlo:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nzchar</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"BCCH_TOKEN"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>No guarde el token dentro de scripts ni lo publique en GitHub.</p>
 </div>
 <div class="section level2">
-<h2 id="uso">Uso<a class="anchor" aria-label="anchor" href="#uso"></a>
+<h2 id="flujo-principal">Flujo principal<a class="anchor" aria-label="anchor" href="#flujo-principal"></a>
 </h2>
-<div class="section level3">
-<h3 id="ejemplo-completo-tasa-de-desempleo">Ejemplo completo: tasa de desempleo<a class="anchor" aria-label="anchor" href="#ejemplo-completo-tasa-de-desempleo"></a>
-</h3>
-<p>Supongamos que queremos obtener la tasa de desempleo de Chile. En la BDE del Banco Central la serie se publica con el nombre <strong>tasa de desocupación</strong>, por lo que primero buscamos candidatos con <code><a href="reference/resolve_series.html">resolve_series()</a></code>:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<table class="table">
+<thead><tr>
+<th>Función</th>
+<th>Para qué sirve</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code><a href="reference/metadata.html">metadata()</a></code></td>
+<td>Explorar las series disponibles</td>
+</tr>
+<tr>
+<td><code><a href="reference/resolve_series.html">resolve_series()</a></code></td>
+<td>Buscar candidatos desde texto humano</td>
+</tr>
+<tr>
+<td><code><a href="reference/describe_series.html">describe_series()</a></code></td>
+<td>Revisar la metadata de un código exacto</td>
+</tr>
+<tr>
+<td><code><a href="reference/get_series.html">get_series()</a></code></td>
+<td>Descargar observaciones de un código exacto</td>
+</tr>
+<tr>
+<td><code><a href="reference/plot_series.html">plot_series()</a></code></td>
+<td>Hacer un gráfico rápido con <code>ggplot2</code>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="ejemplo-tasa-de-desempleo">Ejemplo: tasa de desempleo<a class="anchor" aria-label="anchor" href="#ejemplo-tasa-de-desempleo"></a>
+</h2>
+<p>En la BDE del Banco Central la tasa de desempleo aparece como <strong>tasa de desocupación</strong>. Primero buscamos candidatos:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jkunst.com/bcchr/">bcchr</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Requiere BCCH_TOKEN configurado; ver Autenticación.</span></span>
 <span><span class="va">candidatos</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/resolve_series.html">resolve_series</a></span><span class="op">(</span></span>
 <span>  <span class="st">"desocupacion"</span>,</span>
 <span>  frequency <span class="op">=</span> <span class="st">"MONTHLY"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">candidatos</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 6 × 8</span></span>
-<span><span class="co">#&gt;   series_id              frequency spanish_title english_title first_observation</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;                  &lt;chr&gt;     &lt;chr&gt;         &lt;chr&gt;         &lt;date&gt;           </span></span>
-<span><span class="co">#&gt; 1 F049.DES.TAS.HIST.10.M MONTHLY   Tasas de des… Unemployment… 1986-02-01       </span></span>
-<span><span class="co">#&gt; 2 F049.DES.TAS.INE.02.M  MONTHLY   Tasa de deso… Unemployment… 2010-03-01       </span></span>
-<span><span class="co">#&gt; 3 F049.DES.TAS.INE.03.M  MONTHLY   Tasa de deso… Unemployment… 2010-03-01       </span></span>
-<span><span class="co">#&gt; 4 F049.DES.TAS.INE.10.M  MONTHLY   Tasa de deso… Unemployment… 2010-03-01       </span></span>
-<span><span class="co">#&gt; 5 F049.DES.TAS.INE.D02.M MONTHLY   Tasa de deso… Unemployment… 2010-03-01       </span></span>
-<span><span class="co">#&gt; 6 F049.DES.TAS.INE.D03.M MONTHLY   Tasa de deso… Unemployment… 2010-03-01       </span></span>
-<span><span class="co">#&gt; # ℹ 3 more variables: last_observation &lt;date&gt;, updated_at &lt;date&gt;,</span></span>
-<span><span class="co">#&gt; #   created_at &lt;date&gt;</span></span></code></pre></div>
-<p>Entre los resultados está la serie nacional mensual no ajustada del INE, <code>F049.DES.TAS.INE9.10.M</code>. Una vez que conocemos el código exacto, podemos revisar su metadata:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<span><span class="va">candidatos</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>La serie nacional mensual no ajustada del INE es <code>F049.DES.TAS.INE9.10.M</code>. Con el código exacto podemos describirla y descargarla:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">serie</span> <span class="op">&lt;-</span> <span class="st">"F049.DES.TAS.INE9.10.M"</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/describe_series.html">describe_series</a></span><span class="op">(</span><span class="va">serie</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Consultando las 4 frecuencias del Banco Central; esto puede tardar unos</span></span>
-<span><span class="co">#&gt; segundos.</span></span>
-<span><span class="co">#&gt; # A tibble: 1 × 8</span></span>
-<span><span class="co">#&gt;   series_id              frequency spanish_title english_title first_observation</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;                  &lt;chr&gt;     &lt;chr&gt;         &lt;chr&gt;         &lt;date&gt;           </span></span>
-<span><span class="co">#&gt; 1 F049.DES.TAS.INE9.10.M MONTHLY   Tasa de deso… Unemployment… 2010-03-01       </span></span>
-<span><span class="co">#&gt; # ℹ 3 more variables: last_observation &lt;date&gt;, updated_at &lt;date&gt;,</span></span>
-<span><span class="co">#&gt; #   created_at &lt;date&gt;</span></span></code></pre></div>
-<p>Luego descargamos las observaciones. <code><a href="reference/get_series.html">get_series()</a></code> no interpreta nombres: recibe el código exacto y opcionalmente un rango de fechas.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">desempleo</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_series.html">get_series</a></span><span class="op">(</span></span>
+<span></span>
+<span><span class="va">desempleo</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_series.html">get_series</a></span><span class="op">(</span></span>
 <span>  <span class="va">serie</span>,</span>
 <span>  from <span class="op">=</span> <span class="st">"2020-01-01"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">desempleo</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 6 × 3</span></span>
-<span><span class="co">#&gt;   date       value status_code</span></span>
-<span><span class="co">#&gt;   &lt;date&gt;     &lt;dbl&gt; &lt;chr&gt;      </span></span>
-<span><span class="co">#&gt; 1 2026-01-01  8.28 OK         </span></span>
-<span><span class="co">#&gt; 2 2026-02-01  8.33 OK         </span></span>
-<span><span class="co">#&gt; 3 2026-03-01  8.93 OK         </span></span>
-<span><span class="co">#&gt; 4 2026-04-01  9.11 OK         </span></span>
-<span><span class="co">#&gt; 5 2026-05-01  9.44 OK         </span></span>
-<span><span class="co">#&gt; 6 2026-06-01  9.44 OK</span></span></code></pre></div>
-<p>Y para una visualización rápida:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">desempleo</span><span class="op">)</span></span></code></pre></div>
+<p>Y para una inspección rápida:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/plot_series.html">plot_series</a></span><span class="op">(</span><span class="va">desempleo</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-5-1.png" alt="" width="100%"></p>
-<p><code><a href="reference/plot_series.html">plot_series()</a></code> devuelve un objeto <code>ggplot</code>, por lo que puede seguir agregando capas o temas de <code>ggplot2</code> normalmente.</p>
+<p>Para un ejemplo ejecutado y una personalización con <code>ggplot2</code>, vea <a href="articles/ggplot.html">Visualización con ggplot2</a>.</p>
 </div>
-<div class="section level3">
-<h3 id="explorar-el-catálogo-completo">Explorar el catálogo completo<a class="anchor" aria-label="anchor" href="#explorar-el-cat%C3%A1logo-completo"></a>
-</h3>
-<p>Cuando no tiene todavía un concepto específico para buscar, <code><a href="reference/metadata.html">metadata()</a></code> permite revisar el catálogo disponible. Si conoce la frecuencia, indicarla evita consultas innecesarias:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/metadata.html">metadata</a></span><span class="op">(</span><span class="st">"MONTHLY"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 6 × 8</span></span>
-<span><span class="co">#&gt;   series_id           frequency spanish_title    english_title first_observation</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;               &lt;chr&gt;     &lt;chr&gt;            &lt;chr&gt;         &lt;date&gt;           </span></span>
-<span><span class="co">#&gt; 1 G073.IPC.IND.2018.M MONTHLY   IPC General his… Historical H… 1989-04-01       </span></span>
-<span><span class="co">#&gt; 2 G073.IPC.IND.2023.M MONTHLY   General (empalm… Headline (CB… 1998-12-01       </span></span>
-<span><span class="co">#&gt; 3 G073.IPC.V12.2018.M MONTHLY   IPC General his… Historical H… 1990-04-01       </span></span>
-<span><span class="co">#&gt; 4 G073.IPC.V12.2023.M MONTHLY   General (empalm… Headline (CB… 1999-12-01       </span></span>
-<span><span class="co">#&gt; 5 G073.IPC.VAR.2018.M MONTHLY   IPC General his… Historical H… 1989-05-01       </span></span>
-<span><span class="co">#&gt; 6 G073.IPC.VAR.2023.M MONTHLY   General (empalm… Headline (CB… 1999-01-01       </span></span>
-<span><span class="co">#&gt; # ℹ 3 more variables: last_observation &lt;date&gt;, updated_at &lt;date&gt;,</span></span>
-<span><span class="co">#&gt; #   created_at &lt;date&gt;</span></span></code></pre></div>
-<p>Si no especifica una frecuencia, <code><a href="reference/metadata.html">metadata()</a></code> consulta <code>DAILY</code>, <code>MONTHLY</code>, <code>QUARTERLY</code> y <code>ANNUAL</code>. El paquete informa este comportamiento porque requiere cuatro requests. El mensaje puede desactivarse para una llamada con <code>verbose = FALSE</code> o globalmente con:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="section level2">
+<h2 id="explorar-el-catálogo">Explorar el catálogo<a class="anchor" aria-label="anchor" href="#explorar-el-cat%C3%A1logo"></a>
+</h2>
+<p>Si ya conoce la frecuencia, especificarla evita consultas innecesarias:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/metadata.html">metadata</a></span><span class="op">(</span><span class="st">"MONTHLY"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>Sin frecuencia, <code><a href="reference/metadata.html">metadata()</a></code> consulta <code>DAILY</code>, <code>MONTHLY</code>, <code>QUARTERLY</code> y <code>ANNUAL</code>. Puede silenciar el aviso con <code>verbose = FALSE</code> o globalmente con:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>bcchr.verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-</div>
 </div>
 <div class="section level2">
 <h2 id="api-de-bajo-nivel">API de bajo nivel<a class="anchor" aria-label="anchor" href="#api-de-bajo-nivel"></a>
 </h2>
-<p><code><a href="reference/bcch_GetSeries.html">bcch_GetSeries()</a></code> y <code><a href="reference/bcch_SearchSeries.html">bcch_SearchSeries()</a></code> se mantienen para quienes necesiten trabajar directamente con las dos operaciones oficiales del Banco Central y sus nombres de campos originales. Para código nuevo se recomienda la interfaz <code><a href="reference/metadata.html">metadata()</a></code> / <code><a href="reference/resolve_series.html">resolve_series()</a></code> / <code><a href="reference/describe_series.html">describe_series()</a></code> / <code><a href="reference/get_series.html">get_series()</a></code>.</p>
+<p><code><a href="reference/bcch_GetSeries.html">bcch_GetSeries()</a></code> y <code><a href="reference/bcch_SearchSeries.html">bcch_SearchSeries()</a></code> reflejan directamente las dos operaciones oficiales del Banco Central y se mantienen disponibles para quienes necesiten trabajar con los nombres de campos originales.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="enlaces">
@@ -199,12 +173,7 @@
 </ul>
 </div>
 
-<div class="estado-de-desarrollo">
-<h2 data-toc-skip>Estado de desarrollo</h2>
-<ul class="list-unstyled">
-<li><a href="https://github.com/jbkunst/bcchr/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/jbkunst/bcchr/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
-</ul>
-</div>
+
 
   </aside>
 </div>
