@@ -1,17 +1,17 @@
 # bcchr
 
-Paquete para el consumo de información del API de Banco Central de
-Chile. Contiene funciones para el tratamiento y resumen de datos junto a
-otra funciones para gráficar o transformar la información a objetos
-`ts`.
+`bcchr` permite descubrir, describir y descargar series de la Base de
+Datos Estadisticos del Banco Central de Chile desde R.
 
-Más información del API en
+La interfaz principal usa nombres simples en `snake_case` y devuelve
+tibbles con columnas consistentes. Las funciones de bajo nivel que
+reflejan directamente las operaciones oficiales `GetSeries` y
+`SearchSeries` siguen disponibles por compatibilidad.
+
+Más información sobre la API del Banco Central en
 <https://si3.bcentral.cl/estadisticas/Principal1/web_services/index.htm>.
 
-## Installation
-
-You can install the development version of bcchr from
-[GitHub](https://github.com/) with:
+## Instalación
 
 ``` r
 
@@ -19,60 +19,124 @@ You can install the development version of bcchr from
 devtools::install_github("jbkunst/bcchr")
 ```
 
-## Example
+## Autenticación
 
-Luego de cargar el paquete se debe setear los parámetros de acceso
-utilizando `options`.
+La API REST del Banco Central requiere un token. Guárdelo en la variable
+de entorno `BCCH_TOKEN`, por ejemplo en su archivo `.Renviron`:
+
+``` text
+BCCH_TOKEN=su_token
+```
+
+No guarde el token dentro de scripts ni lo suba a GitHub.
+
+Puede verificar que R lo encuentre sin imprimirlo:
+
+``` r
+
+nzchar(Sys.getenv("BCCH_TOKEN"))
+```
+
+## Uso
+
+### Explorar el catálogo
+
+[`metadata()`](https://jkunst.com/bcchr/reference/metadata.md) devuelve
+las series disponibles y su metadata. Si conoce la frecuencia, indicarla
+evita consultas innecesarias:
 
 ``` r
 
 library(bcchr)
 
-options(
-  bcc_api_user = "usuario",
-  bcc_api_pass = "contraseña"
+metadata("MONTHLY") |> head()
+```
+
+Si no especifica una frecuencia,
+[`metadata()`](https://jkunst.com/bcchr/reference/metadata.md) consulta
+`DAILY`, `MONTHLY`, `QUARTERLY` y `ANNUAL`. El paquete informa este
+comportamiento porque requiere cuatro requests. El mensaje puede
+desactivarse con:
+
+``` r
+
+options(bcchr.verbose = FALSE)
+```
+
+### Buscar una serie
+
+[`resolve_series()`](https://jkunst.com/bcchr/reference/resolve_series.md)
+busca candidatos a partir de texto humano, pero no elige una serie por
+el usuario:
+
+``` r
+
+resolve_series(
+  "imacec",
+  frequency = "MONTHLY"
 )
 ```
 
-Luego la funciones acceden a estos valores para hacer los *request* a la
-API.
+### Describir una serie
+
+Cuando ya conoce el código exacto,
+[`describe_series()`](https://jkunst.com/bcchr/reference/describe_series.md)
+devuelve su metadata:
+
+``` r
+
+describe_series("F073.TCO.PRE.Z.D")
+```
+
+### Descargar observaciones
+
+[`get_series()`](https://jkunst.com/bcchr/reference/get_series.md)
+recibe un código exacto y un rango opcional de fechas. No intenta
+interpretar nombres ni resolver series:
+
+``` r
+
+dolar <- get_series(
+  "F073.TCO.PRE.Z.D",
+  from = "2026-01-01",
+  to = "2026-02-01"
+)
+
+dolar
+```
+
+El resultado usa una estructura pequeña y predecible:
+
+``` text
+# A tibble: ... x 3
+  date       value status_code
+  <date>     <dbl> <chr>
+  ...
+```
+
+### Graficar
+
+[`plot_series()`](https://jkunst.com/bcchr/reference/plot_series.md) es
+un helper opcional. `ggplot2` solo se necesita al usar esta función:
+
+``` r
+
+plot_series(dolar)
+```
+
+Si `ggplot2` no está instalado, `rlang` ofrecerá instalarlo en sesiones
+interactivas.
+
+## API de bajo nivel
 
 [`bcch_GetSeries()`](https://jkunst.com/bcchr/reference/bcch_GetSeries.md)
-now reads Banco Central JSON responses as raw bytes and converts them
-from `ISO-8859-1` to `UTF-8` before parsing. This avoids
-encoding-related JSON parsing failures in Linux and GitHub Actions
-environments.
-
-``` r
-
-bcchr::bcch_GetSeries(
-  "F032.PIB.FLU.R.CLP.EP18.Z.Z.0.T",
-  firstdate = as.Date("2000-01-01"),
-  lastdate = Sys.Date()
-)
-```
-
-``` r
-
-desempleo <- bcch_GetSeries("F049.DES.TAS.INE9.10.M")
-
-desempleo
-#> # A tibble: 148 × 3
-#>    indexDateString value statusCode
-#>    <date>          <dbl> <chr>     
-#>  1 2010-03-01       9.23 OK        
-#>  2 2010-04-01       8.84 OK        
-#>  3 2010-05-01       9.09 OK        
-#>  4 2010-06-01       8.66 OK        
-#>  5 2010-07-01       8.51 OK        
-#>  6 2010-08-01       8.44 OK        
-#>  7 2010-09-01       8.12 OK        
-#>  8 2010-10-01       7.81 OK        
-#>  9 2010-11-01       7.23 OK        
-#> 10 2010-12-01       7.21 OK        
-#> # … with 138 more rows
-
-autoplot(desempleo)
-```
-
-![](reference/figures/README-unnamed-chunk-4-1.png)
+y
+[`bcch_SearchSeries()`](https://jkunst.com/bcchr/reference/bcch_SearchSeries.md)
+se mantienen para quienes necesiten trabajar directamente con las dos
+operaciones oficiales del Banco Central y sus nombres de campos
+originales. Para código nuevo se recomienda la interfaz
+[`metadata()`](https://jkunst.com/bcchr/reference/metadata.md) /
+[`resolve_series()`](https://jkunst.com/bcchr/reference/resolve_series.md)
+/
+[`describe_series()`](https://jkunst.com/bcchr/reference/describe_series.md)
+/ [`get_series()`](https://jkunst.com/bcchr/reference/get_series.md).

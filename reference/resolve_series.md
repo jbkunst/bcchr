@@ -1,30 +1,40 @@
-# Resolve a human description to Banco Central series
+# Resolver una descripcion a series del Banco Central
 
-Search the Banco Central catalog using a human-readable term and return
-the matching series candidates. This function finds candidates only; it
-does not choose a series on the user's behalf.
+Busca en el catalogo del Banco Central usando un termino legible por una
+persona y devuelve las series candidatas. Esta funcion solo encuentra
+candidatos; no elige una serie por el usuario.
 
 ## Usage
 
 ``` r
-resolve_series(query, frequency = NULL, token = NULL)
+resolve_series(
+  query,
+  frequency = NULL,
+  token = NULL,
+  verbose = getOption("bcchr.verbose", TRUE)
+)
 ```
 
 ## Arguments
 
 - query:
 
-  Text to search for, such as `"imacec"` or `"dolar observado"`.
+  Texto a buscar, por ejemplo `"imacec"` o `"dolar observado"`.
 
 - frequency:
 
-  Optional frequency filter passed to
+  Filtro opcional de frecuencia pasado a
   [`metadata()`](https://jkunst.com/bcchr/reference/metadata.md).
 
 - token:
 
-  Banco Central REST API token.
+  Token de acceso a la API REST del Banco Central.
+
+- verbose:
+
+  Si es `TRUE`, informa cuando se consultan las cuatro frecuencias. Por
+  defecto usa la opcion `bcchr.verbose` y luego `TRUE`.
 
 ## Value
 
-A tibble with every matching series candidate.
+Un tibble con todas las series candidatas encontradas.

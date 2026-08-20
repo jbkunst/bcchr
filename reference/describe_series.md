@@ -1,26 +1,35 @@
-# Describe one Banco Central series
+# Describir una serie del Banco Central
 
-Return metadata for one exact Banco Central series code. This function
-does not interpret human-readable names. Use
+Devuelve la metadata de una serie identificada por su codigo exacto.
+Esta funcion no interpreta nombres en lenguaje natural. Use
 [`resolve_series()`](https://jkunst.com/bcchr/reference/resolve_series.md)
-first when the series code is unknown.
+primero cuando no conozca el codigo de la serie.
 
 ## Usage
 
 ``` r
-describe_series(series_id, token = NULL)
+describe_series(
+  series_id,
+  token = NULL,
+  verbose = getOption("bcchr.verbose", TRUE)
+)
 ```
 
 ## Arguments
 
 - series_id:
 
-  Exact Banco Central series code.
+  Codigo exacto de la serie del Banco Central.
 
 - token:
 
-  Banco Central REST API token.
+  Token de acceso a la API REST del Banco Central.
+
+- verbose:
+
+  Si es `TRUE`, informa cuando se consultan las cuatro frecuencias. Por
+  defecto usa la opcion `bcchr.verbose` y luego `TRUE`.
 
 ## Value
 
-A one-row tibble describing the series.
+Un tibble de una fila con la descripcion de la serie.

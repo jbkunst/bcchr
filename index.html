@@ -53,56 +53,89 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>Paquete para el consumo de información del API de Banco Central de Chile. Contiene funciones para el tratamiento y resumen de datos junto a otra funciones para gráficar o transformar la información a objetos <code>ts</code>.</p>
-<p>Más información del API en <a href="https://si3.bcentral.cl/estadisticas/Principal1/web_services/index.htm" class="external-link uri">https://si3.bcentral.cl/estadisticas/Principal1/web_services/index.htm</a>.</p>
+<p><code>bcchr</code> permite descubrir, describir y descargar series de la Base de Datos Estadisticos del Banco Central de Chile desde R.</p>
+<p>La interfaz principal usa nombres simples en <code>snake_case</code> y devuelve tibbles con columnas consistentes. Las funciones de bajo nivel que reflejan directamente las operaciones oficiales <code>GetSeries</code> y <code>SearchSeries</code> siguen disponibles por compatibilidad.</p>
+<p>Más información sobre la API del Banco Central en <a href="https://si3.bcentral.cl/estadisticas/Principal1/web_services/index.htm" class="external-link uri">https://si3.bcentral.cl/estadisticas/Principal1/web_services/index.htm</a>.</p>
 <div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+<h2 id="instalación">Instalación<a class="anchor" aria-label="anchor" href="#instalaci%C3%B3n"></a>
 </h2>
-<p>You can install the development version of bcchr from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"jbkunst/bcchr"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+<h2 id="autenticación">Autenticación<a class="anchor" aria-label="anchor" href="#autenticaci%C3%B3n"></a>
 </h2>
-<p>Luego de cargar el paquete se debe setear los parámetros de acceso utilizando <code>options</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<p>La API REST del Banco Central requiere un token. Guárdelo en la variable de entorno <code>BCCH_TOKEN</code>, por ejemplo en su archivo <code>.Renviron</code>:</p>
+<pre class="text"><code><span><span class="va">BCCH_TOKEN</span><span class="op">=</span><span class="va">su_token</span></span></code></pre>
+<p>No guarde el token dentro de scripts ni lo suba a GitHub.</p>
+<p>Puede verificar que R lo encuentre sin imprimirlo:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nzchar</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"BCCH_TOKEN"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="uso">Uso<a class="anchor" aria-label="anchor" href="#uso"></a>
+</h2>
+<div class="section level3">
+<h3 id="explorar-el-catálogo">Explorar el catálogo<a class="anchor" aria-label="anchor" href="#explorar-el-cat%C3%A1logo"></a>
+</h3>
+<p><code><a href="reference/metadata.html">metadata()</a></code> devuelve las series disponibles y su metadata. Si conoce la frecuencia, indicarla evita consultas innecesarias:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jkunst.com/bcchr/">bcchr</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span></span>
-<span>  bcc_api_user <span class="op">=</span> <span class="st">"usuario"</span>,</span>
-<span>  bcc_api_pass <span class="op">=</span> <span class="st">"contraseña"</span></span>
+<span><span class="fu"><a href="reference/metadata.html">metadata</a></span><span class="op">(</span><span class="st">"MONTHLY"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>Si no especifica una frecuencia, <code><a href="reference/metadata.html">metadata()</a></code> consulta <code>DAILY</code>, <code>MONTHLY</code>, <code>QUARTERLY</code> y <code>ANNUAL</code>. El paquete informa este comportamiento porque requiere cuatro requests. El mensaje puede desactivarse con:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>bcchr.verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="buscar-una-serie">Buscar una serie<a class="anchor" aria-label="anchor" href="#buscar-una-serie"></a>
+</h3>
+<p><code><a href="reference/resolve_series.html">resolve_series()</a></code> busca candidatos a partir de texto humano, pero no elige una serie por el usuario:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/resolve_series.html">resolve_series</a></span><span class="op">(</span></span>
+<span>  <span class="st">"imacec"</span>,</span>
+<span>  frequency <span class="op">=</span> <span class="st">"MONTHLY"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>Luego la funciones acceden a estos valores para hacer los <em>request</em> a la API.</p>
-<p><code><a href="reference/bcch_GetSeries.html">bcch_GetSeries()</a></code> now reads Banco Central JSON responses as raw bytes and converts them from <code>ISO-8859-1</code> to <code>UTF-8</code> before parsing. This avoids encoding-related JSON parsing failures in Linux and GitHub Actions environments.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">bcchr</span><span class="fu">::</span><span class="fu"><a href="reference/bcch_GetSeries.html">bcch_GetSeries</a></span><span class="op">(</span></span>
-<span>  <span class="st">"F032.PIB.FLU.R.CLP.EP18.Z.Z.0.T"</span>,</span>
-<span>  firstdate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2000-01-01"</span><span class="op">)</span>,</span>
-<span>  lastdate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">desempleo</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bcch_GetSeries.html">bcch_GetSeries</a></span><span class="op">(</span><span class="st">"F049.DES.TAS.INE9.10.M"</span><span class="op">)</span></span>
+</div>
+<div class="section level3">
+<h3 id="describir-una-serie">Describir una serie<a class="anchor" aria-label="anchor" href="#describir-una-serie"></a>
+</h3>
+<p>Cuando ya conoce el código exacto, <code><a href="reference/describe_series.html">describe_series()</a></code> devuelve su metadata:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/describe_series.html">describe_series</a></span><span class="op">(</span><span class="st">"F073.TCO.PRE.Z.D"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="descargar-observaciones">Descargar observaciones<a class="anchor" aria-label="anchor" href="#descargar-observaciones"></a>
+</h3>
+<p><code><a href="reference/get_series.html">get_series()</a></code> recibe un código exacto y un rango opcional de fechas. No intenta interpretar nombres ni resolver series:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dolar</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_series.html">get_series</a></span><span class="op">(</span></span>
+<span>  <span class="st">"F073.TCO.PRE.Z.D"</span>,</span>
+<span>  from <span class="op">=</span> <span class="st">"2026-01-01"</span>,</span>
+<span>  to <span class="op">=</span> <span class="st">"2026-02-01"</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">desempleo</span></span>
-<span><span class="co">#&gt; # A tibble: 148 × 3</span></span>
-<span><span class="co">#&gt;    indexDateString value statusCode</span></span>
-<span><span class="co">#&gt;    &lt;date&gt;          &lt;dbl&gt; &lt;chr&gt;     </span></span>
-<span><span class="co">#&gt;  1 2010-03-01       9.23 OK        </span></span>
-<span><span class="co">#&gt;  2 2010-04-01       8.84 OK        </span></span>
-<span><span class="co">#&gt;  3 2010-05-01       9.09 OK        </span></span>
-<span><span class="co">#&gt;  4 2010-06-01       8.66 OK        </span></span>
-<span><span class="co">#&gt;  5 2010-07-01       8.51 OK        </span></span>
-<span><span class="co">#&gt;  6 2010-08-01       8.44 OK        </span></span>
-<span><span class="co">#&gt;  7 2010-09-01       8.12 OK        </span></span>
-<span><span class="co">#&gt;  8 2010-10-01       7.81 OK        </span></span>
-<span><span class="co">#&gt;  9 2010-11-01       7.23 OK        </span></span>
-<span><span class="co">#&gt; 10 2010-12-01       7.21 OK        </span></span>
-<span><span class="co">#&gt; # … with 138 more rows</span></span>
-<span></span>
-<span><span class="fu">autoplot</span><span class="op">(</span><span class="va">desempleo</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-4-1.png" width="100%"></p>
+<span><span class="va">dolar</span></span></code></pre></div>
+<p>El resultado usa una estructura pequeña y predecible:</p>
+<pre class="text"><code># A tibble: ... x 3
+  date       value status_code
+  &lt;date&gt;     &lt;dbl&gt; &lt;chr&gt;
+  ...</code></pre>
+</div>
+<div class="section level3">
+<h3 id="graficar">Graficar<a class="anchor" aria-label="anchor" href="#graficar"></a>
+</h3>
+<p><code><a href="reference/plot_series.html">plot_series()</a></code> es un helper opcional. <code>ggplot2</code> solo se necesita al usar esta función:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/plot_series.html">plot_series</a></span><span class="op">(</span><span class="va">dolar</span><span class="op">)</span></span></code></pre></div>
+<p>Si <code>ggplot2</code> no está instalado, <code>rlang</code> ofrecerá instalarlo en sesiones interactivas.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="api-de-bajo-nivel">API de bajo nivel<a class="anchor" aria-label="anchor" href="#api-de-bajo-nivel"></a>
+</h2>
+<p><code><a href="reference/bcch_GetSeries.html">bcch_GetSeries()</a></code> y <code><a href="reference/bcch_SearchSeries.html">bcch_SearchSeries()</a></code> se mantienen para quienes necesiten trabajar directamente con las dos operaciones oficiales del Banco Central y sus nombres de campos originales. Para código nuevo se recomienda la interfaz <code><a href="reference/metadata.html">metadata()</a></code> / <code><a href="reference/resolve_series.html">resolve_series()</a></code> / <code><a href="reference/describe_series.html">describe_series()</a></code> / <code><a href="reference/get_series.html">get_series()</a></code>.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
