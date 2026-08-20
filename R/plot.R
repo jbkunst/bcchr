@@ -18,5 +18,6 @@ plot_series <- function(x) {
   }
 
   ggplot2::ggplot(x, ggplot2::aes(x = .data$date, y = .data$value)) +
-    ggplot2::geom_line()
+    ggplot2::geom_line() +
+    ggplot2::theme_minimal()
 }
