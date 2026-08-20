@@ -2,18 +2,30 @@
 % Please edit documentation in R/plot.R
 \name{plot_series}
 \alias{plot_series}
-\title{Plot a Banco Central series}
+\title{Graficar series del Banco Central}
 \usage{
 plot_series(x)
 }
 \arguments{
-\item{x}{A data frame returned by \code{\link[=get_series]{get_series()}} with \code{date} and \code{value}
-columns.}
+\item{x}{Data frame devuelto por \code{\link[=get_series]{get_series()}} con las columnas \code{date} y
+\code{value}.}
 }
 \value{
-A ggplot object.
+Un objeto ggplot.
 }
 \description{
-Plot a data frame returned by \code{\link[=get_series]{get_series()}}. This is a small convenience
-helper; it does not add classes or modify the data.
+Grafica un data frame devuelto por \code{\link[=get_series]{get_series()}}. Cuando contiene varias
+series, usa \code{series_id} para separarlas. Es una ayuda pequeña de
+visualizacion: no agrega clases ni modifica los datos.
+}
+\examples{
+if (nzchar(Sys.getenv("BCCH_TOKEN"))) {
+  indicators <- get_series(
+    c("F073.TCO.PRE.Z.D", "F073.UFF.PRE.Z.D"),
+    from = "2025-01-01",
+    to = "2025-03-31"
+  )
+
+  plot_series(indicators)
+}
 }

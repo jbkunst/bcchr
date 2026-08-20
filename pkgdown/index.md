@@ -2,7 +2,7 @@
 
 `bcchr` es una interfaz pequeña para trabajar desde R con la Base de Datos Estadísticos del Banco Central de Chile.
 
-El paquete separa deliberadamente cuatro tareas: **descubrir**, **resolver**, **describir** y **descargar** series. Las funciones devuelven tibbles simples y usan códigos exactos cuando corresponde.
+El paquete separa deliberadamente cuatro tareas: **descubrir**, **resolver**, **describir** y **descargar** series. Las funciones aceptan uno o varios valores, devuelven tibbles simples y usan códigos exactos cuando corresponde.
 
 ## Autenticación
 
@@ -19,9 +19,9 @@ No guarde el token dentro de scripts ni lo publique en GitHub.
 | Función | Para qué sirve |
 |---|---|
 | `metadata()` | Explorar las series disponibles |
-| `resolve_series()` | Buscar candidatos desde texto humano |
-| `describe_series()` | Revisar la metadata de un código exacto |
-| `get_series()` | Descargar observaciones de un código exacto |
+| `resolve_series()` | Buscar candidatos desde uno o varios textos |
+| `describe_series()` | Revisar la metadata de uno o varios códigos exactos |
+| `get_series()` | Descargar una o varias series en formato largo |
 | `plot_series()` | Hacer un gráfico rápido con `ggplot2` |
 
 ## Ejemplo: tasa de desempleo
@@ -58,6 +58,18 @@ Y para una inspección rápida:
 
 ```r
 plot_series(desempleo)
+```
+
+También se pueden descargar varias series en una sola llamada:
+
+```r
+indicadores <- get_series(
+  c("F073.TCO.PRE.Z.D", "F073.UFF.PRE.Z.D"),
+  from = "2025-01-01",
+  to = "2025-03-31"
+)
+
+plot_series(indicadores)
 ```
 
 Para un ejemplo ejecutado y una personalización con `ggplot2`, vea [Visualización con ggplot2](articles/ggplot.html).

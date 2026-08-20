@@ -2,25 +2,39 @@
 % Please edit documentation in R/interface.R
 \name{get_series}
 \alias{get_series}
-\title{Get observations for one Banco Central series}
+\title{Obtener observaciones de series del Banco Central}
 \usage{
 get_series(series_id, from = NULL, to = NULL, token = NULL)
 }
 \arguments{
-\item{series_id}{Exact Banco Central series code.}
+\item{series_id}{Vector de codigos exactos de series del Banco Central.}
 
-\item{from}{Optional first date in \code{YYYY-MM-DD} format or a \code{Date}.}
+\item{from}{Fecha inicial opcional en formato \code{YYYY-MM-DD} o como objeto
+\code{Date}.}
 
-\item{to}{Optional last date in \code{YYYY-MM-DD} format or a \code{Date}.}
+\item{to}{Fecha final opcional en formato \code{YYYY-MM-DD} o como objeto \code{Date}.}
 
-\item{token}{Banco Central REST API token. By default it reads the
-\code{bcch_api_token} option and then the \code{BCCH_TOKEN} environment variable.}
+\item{token}{Token de acceso a la API REST del Banco Central. Por defecto lee
+la opcion \code{bcch_api_token} y luego la variable de entorno \code{BCCH_TOKEN}.}
 }
 \value{
-A tibble with \code{date}, \code{value}, and \code{status_code}.
+Un tibble en formato largo con las columnas \code{series_id}, \code{date},
+\code{value} y \code{status_code}.
 }
 \description{
-Retrieve observations for one exact Banco Central series code and an optional
-date range. This function does one thing only: it retrieves data for the code
-supplied. It never interprets or resolves human-readable series names.
+Obtiene las observaciones de una o varias series identificadas por sus
+codigos exactos y, opcionalmente, un rango de fechas comun. Esta funcion solo
+obtiene datos para los codigos entregados; nunca interpreta ni resuelve
+nombres de series.
+}
+\examples{
+if (nzchar(Sys.getenv("BCCH_TOKEN"))) {
+  indicators <- get_series(
+    c("F073.TCO.PRE.Z.D", "F073.UFF.PRE.Z.D"),
+    from = "2025-01-02",
+    to = "2025-01-05"
+  )
+
+  indicators |> head()
+}
 }

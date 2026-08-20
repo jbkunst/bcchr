@@ -2,7 +2,7 @@
 
 [![R-CMD-check](https://github.com/jbkunst/bcchr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jbkunst/bcchr/actions/workflows/R-CMD-check.yaml)
 
-Cliente R pequeño para descubrir, describir y descargar series de la Base de Datos Estadísticos del Banco Central de Chile.
+Cliente R pequeño para descubrir, describir y descargar una o varias series de la Base de Datos Estadísticos del Banco Central de Chile.
 
 Documentación completa: <https://jkunst.com/bcchr/>
 
@@ -53,6 +53,19 @@ desempleo <- get_series(
 plot_series(desempleo)
 ```
 
+Las funciones principales también aceptan vectores. `get_series()` devuelve los
+resultados en formato largo, identificados por `series_id`:
+
+```r
+indicadores <- get_series(
+  c("F073.TCO.PRE.Z.D", "F073.UFF.PRE.Z.D"),
+  from = "2025-01-01",
+  to = "2025-03-31"
+)
+
+plot_series(indicadores)
+```
+
 Para explorar el catálogo directamente:
 
 ```r
@@ -62,9 +75,9 @@ metadata("MONTHLY") |> head()
 ## Interfaz
 
 - `metadata()`: descubre las series disponibles y su cobertura.
-- `resolve_series()`: busca candidatos a partir de texto humano.
-- `describe_series()`: describe un código exacto.
-- `get_series()`: descarga observaciones de un código exacto.
+- `resolve_series()`: busca candidatos para uno o varios textos humanos.
+- `describe_series()`: describe uno o varios códigos exactos.
+- `get_series()`: descarga una o varias series en formato largo.
 - `plot_series()`: gráfico rápido opcional con `ggplot2`.
 
 `bcch_GetSeries()` y `bcch_SearchSeries()` siguen disponibles como API de bajo nivel para trabajar directamente con las dos operaciones oficiales del Banco Central.

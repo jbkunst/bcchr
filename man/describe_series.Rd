@@ -11,7 +11,7 @@ describe_series(
 )
 }
 \arguments{
-\item{series_id}{Codigo exacto de la serie del Banco Central.}
+\item{series_id}{Vector de codigos exactos de series del Banco Central.}
 
 \item{token}{Token de acceso a la API REST del Banco Central.}
 
@@ -19,11 +19,19 @@ describe_series(
 frecuencias. Por defecto usa la opcion \code{bcchr.verbose} y luego \code{TRUE}.}
 }
 \value{
-Un tibble de una fila con la descripcion de la serie.
+Un tibble con una fila por cada codigo solicitado.
 }
 \description{
-Devuelve la metadata de una serie identificada por su codigo exacto. Esta
-funcion no interpreta nombres en lenguaje natural. Use
-\code{\link[=resolve_series]{resolve_series()}} primero cuando no conozca el
-codigo de la serie.
+Devuelve la metadata de una o varias series identificadas por sus codigos
+exactos. Esta funcion no interpreta nombres en lenguaje natural. Use
+\code{\link[=resolve_series]{resolve_series()}} primero cuando no conozca los
+codigos.
+}
+\examples{
+if (nzchar(Sys.getenv("BCCH_TOKEN"))) {
+  describe_series(
+    c("F073.TCO.PRE.Z.D", "F073.UFF.PRE.Z.D"),
+    verbose = FALSE
+  )[c("series_id", "frequency", "spanish_title")]
+}
 }
