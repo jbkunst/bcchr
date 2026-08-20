@@ -20,7 +20,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-secondary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="index.html">bcchr</a>
 
@@ -68,7 +68,7 @@
 </h2>
 <p>La API REST del Banco Central requiere un token. Guárdelo en la variable de entorno <code>BCCH_TOKEN</code>, por ejemplo en su archivo <code>.Renviron</code>:</p>
 <pre class="text"><code><span><span class="va">BCCH_TOKEN</span><span class="op">=</span><span class="va">su_token</span></span></code></pre>
-<p>No guarde el token dentro de scripts ni lo suba a GitHub.</p>
+<p>No guarde el token dentro de scripts ni lo suba a GitHub. Todos los ejemplos que consultan directamente la API requieren que <code>BCCH_TOKEN</code> esté configurado.</p>
 <p>Puede verificar que R lo encuentre sin imprimirlo:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nzchar</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"BCCH_TOKEN"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -83,6 +83,7 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jkunst.com/bcchr/">bcchr</a></span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># Requiere BCCH_TOKEN configurado; ver Autenticación.</span></span>
 <span><span class="fu"><a href="reference/metadata.html">metadata</a></span><span class="op">(</span><span class="st">"MONTHLY"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Si no especifica una frecuencia, <code><a href="reference/metadata.html">metadata()</a></code> consulta <code>DAILY</code>, <code>MONTHLY</code>, <code>QUARTERLY</code> y <code>ANNUAL</code>. El paquete informa este comportamiento porque requiere cuatro requests. El mensaje puede desactivarse con:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -93,7 +94,8 @@
 </h3>
 <p><code><a href="reference/resolve_series.html">resolve_series()</a></code> busca candidatos a partir de texto humano, pero no elige una serie por el usuario:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/resolve_series.html">resolve_series</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="co"># Requiere BCCH_TOKEN configurado; ver Autenticación.</span></span>
+<span><span class="fu"><a href="reference/resolve_series.html">resolve_series</a></span><span class="op">(</span></span>
 <span>  <span class="st">"imacec"</span>,</span>
 <span>  frequency <span class="op">=</span> <span class="st">"MONTHLY"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -103,14 +105,16 @@
 </h3>
 <p>Cuando ya conoce el código exacto, <code><a href="reference/describe_series.html">describe_series()</a></code> devuelve su metadata:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/describe_series.html">describe_series</a></span><span class="op">(</span><span class="st">"F073.TCO.PRE.Z.D"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Requiere BCCH_TOKEN configurado; ver Autenticación.</span></span>
+<span><span class="fu"><a href="reference/describe_series.html">describe_series</a></span><span class="op">(</span><span class="st">"F073.TCO.PRE.Z.D"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="descargar-observaciones">Descargar observaciones<a class="anchor" aria-label="anchor" href="#descargar-observaciones"></a>
 </h3>
 <p><code><a href="reference/get_series.html">get_series()</a></code> recibe un código exacto y un rango opcional de fechas. No intenta interpretar nombres ni resolver series:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dolar</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_series.html">get_series</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="co"># Requiere BCCH_TOKEN configurado; ver Autenticación.</span></span>
+<span><span class="va">dolar</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_series.html">get_series</a></span><span class="op">(</span></span>
 <span>  <span class="st">"F073.TCO.PRE.Z.D"</span>,</span>
 <span>  from <span class="op">=</span> <span class="st">"2026-01-01"</span>,</span>
 <span>  to <span class="op">=</span> <span class="st">"2026-02-01"</span></span>
@@ -128,7 +132,8 @@
 </h3>
 <p><code><a href="reference/plot_series.html">plot_series()</a></code> es un helper opcional. <code>ggplot2</code> solo se necesita al usar esta función:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/plot_series.html">plot_series</a></span><span class="op">(</span><span class="va">dolar</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Este ejemplo usa `dolar`, obtenido previamente con get_series().</span></span>
+<span><span class="fu"><a href="reference/plot_series.html">plot_series</a></span><span class="op">(</span><span class="va">dolar</span><span class="op">)</span></span></code></pre></div>
 <p>Si <code>ggplot2</code> no está instalado, <code>rlang</code> ofrecerá instalarlo en sesiones interactivas.</p>
 </div>
 </div>

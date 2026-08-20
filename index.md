@@ -28,7 +28,9 @@ de entorno `BCCH_TOKEN`, por ejemplo en su archivo `.Renviron`:
 BCCH_TOKEN=su_token
 ```
 
-No guarde el token dentro de scripts ni lo suba a GitHub.
+No guarde el token dentro de scripts ni lo suba a GitHub. Todos los
+ejemplos que consultan directamente la API requieren que `BCCH_TOKEN`
+esté configurado.
 
 Puede verificar que R lo encuentre sin imprimirlo:
 
@@ -49,6 +51,7 @@ evita consultas innecesarias:
 
 library(bcchr)
 
+# Requiere BCCH_TOKEN configurado; ver Autenticación.
 metadata("MONTHLY") |> head()
 ```
 
@@ -71,6 +74,7 @@ el usuario:
 
 ``` r
 
+# Requiere BCCH_TOKEN configurado; ver Autenticación.
 resolve_series(
   "imacec",
   frequency = "MONTHLY"
@@ -85,6 +89,7 @@ devuelve su metadata:
 
 ``` r
 
+# Requiere BCCH_TOKEN configurado; ver Autenticación.
 describe_series("F073.TCO.PRE.Z.D")
 ```
 
@@ -96,6 +101,7 @@ interpretar nombres ni resolver series:
 
 ``` r
 
+# Requiere BCCH_TOKEN configurado; ver Autenticación.
 dolar <- get_series(
   "F073.TCO.PRE.Z.D",
   from = "2026-01-01",
@@ -121,6 +127,7 @@ un helper opcional. `ggplot2` solo se necesita al usar esta función:
 
 ``` r
 
+# Este ejemplo usa `dolar`, obtenido previamente con get_series().
 plot_series(dolar)
 ```
 
