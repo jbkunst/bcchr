@@ -1,4 +1,4 @@
-# License
+# Licencia
 
     YEAR: 2022
     COPYRIGHT HOLDER: bcchr authors

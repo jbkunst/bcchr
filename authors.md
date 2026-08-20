@@ -1,14 +1,14 @@
-# Authors and Citation
+# Autores y Citas
 
-## Authors
+## Autores
 
-- **[Joshua Kunst](https://jkunst.com)**. Author, maintainer.
+- **[Joshua Kunst](https://jkunst.com)**. Autor-a, mantenedor-a.
 
-- **Ignacio Rossi**. Author.
+- **Ignacio Rossi**. Autor-a.
 
-## Citation
+## Cita
 
-Source:
+Código:
 [`DESCRIPTION`](https://github.com/jbkunst/bcchr/blob/main/DESCRIPTION)
 
 Kunst J, Rossi I (2026). *bcchr: API para Base de Datos Estadísticos del

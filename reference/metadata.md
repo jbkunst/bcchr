@@ -4,7 +4,7 @@ Obtiene el catalogo actual de series disponibles del Banco Central de
 Chile. Use esta funcion para conocer que series existen, su frecuencia y
 su cobertura temporal.
 
-## Usage
+## Uso
 
 ``` r
 metadata(
@@ -14,7 +14,7 @@ metadata(
 )
 ```
 
-## Arguments
+## Argumentos
 
 - frequency:
 
@@ -31,7 +31,7 @@ metadata(
   Si es `TRUE`, informa cuando se consultan las cuatro frecuencias. Por
   defecto usa la opcion `bcchr.verbose` y luego `TRUE`.
 
-## Value
+## Valor
 
 Un tibble con la metadata de las series y nombres de columnas en
 snake_case.

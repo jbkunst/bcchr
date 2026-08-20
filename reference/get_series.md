@@ -5,13 +5,13 @@ optional date range. This function does one thing only: it retrieves
 data for the code supplied. It never interprets or resolves
 human-readable series names.
 
-## Usage
+## Uso
 
 ``` r
 get_series(series_id, from = NULL, to = NULL, token = NULL)
 ```
 
-## Arguments
+## Argumentos
 
 - series_id:
 
@@ -30,6 +30,6 @@ get_series(series_id, from = NULL, to = NULL, token = NULL)
   Banco Central REST API token. By default it reads the `bcch_api_token`
   option and then the `BCCH_TOKEN` environment variable.
 
-## Value
+## Valor
 
 A tibble with `date`, `value`, and `status_code`.

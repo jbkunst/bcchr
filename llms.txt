@@ -148,7 +148,7 @@ originales. Para código nuevo se recomienda la interfaz
 [`describe_series()`](https://jkunst.com/bcchr/reference/describe_series.md)
 / [`get_series()`](https://jkunst.com/bcchr/reference/get_series.md).
 
-# Package index
+# Índice del paquete
 
 ## Interfaz moderna
 
@@ -177,7 +177,7 @@ Acceso directo a las operaciones oficiales del Banco Central.
 - [`bcch_SearchSeries()`](https://jkunst.com/bcchr/reference/bcch_SearchSeries.md)
   : Obtener las series disponibles por frecuencia
 
-# Articles
+# Artículos
 
 ### Visualizacion
 

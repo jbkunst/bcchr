@@ -4,7 +4,7 @@ Busca en el catalogo del Banco Central usando un termino legible por una
 persona y devuelve las series candidatas. Esta funcion solo encuentra
 candidatos; no elige una serie por el usuario.
 
-## Usage
+## Uso
 
 ``` r
 resolve_series(
@@ -15,7 +15,7 @@ resolve_series(
 )
 ```
 
-## Arguments
+## Argumentos
 
 - query:
 
@@ -35,6 +35,6 @@ resolve_series(
   Si es `TRUE`, informa cuando se consultan las cuatro frecuencias. Por
   defecto usa la opcion `bcchr.verbose` y luego `TRUE`.
 
-## Value
+## Valor
 
 Un tibble con todas las series candidatas encontradas.

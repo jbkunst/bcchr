@@ -5,7 +5,7 @@ Esta funcion no interpreta nombres en lenguaje natural. Use
 [`resolve_series()`](https://jkunst.com/bcchr/reference/resolve_series.md)
 primero cuando no conozca el codigo de la serie.
 
-## Usage
+## Uso
 
 ``` r
 describe_series(
@@ -15,7 +15,7 @@ describe_series(
 )
 ```
 
-## Arguments
+## Argumentos
 
 - series_id:
 
@@ -30,6 +30,6 @@ describe_series(
   Si es `TRUE`, informa cuando se consultan las cuatro frecuencias. Por
   defecto usa la opcion `bcchr.verbose` y luego `TRUE`.
 
-## Value
+## Valor
 
 Un tibble de una fila con la descripcion de la serie.

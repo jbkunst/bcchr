@@ -4,13 +4,13 @@ Acceso directo a la operación `GetSeries` del API del Banco Central.
 Para la interfaz moderna use
 [`get_series()`](https://jkunst.com/bcchr/reference/get_series.md).
 
-## Usage
+## Uso
 
 ``` r
 bcch_GetSeries(timeseries, firstdate = NULL, lastdate = NULL, token = NULL)
 ```
 
-## Arguments
+## Argumentos
 
 - timeseries:
 
@@ -28,6 +28,6 @@ bcch_GetSeries(timeseries, firstdate = NULL, lastdate = NULL, token = NULL)
 
   Token del API del Banco Central.
 
-## Value
+## Valor
 
 Un tibble con los nombres originales entregados por el API.

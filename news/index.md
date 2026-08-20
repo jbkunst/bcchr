@@ -1,4 +1,4 @@
-# Changelog
+# Registro de cambios
 
 ## bcchr 0.1.0
 

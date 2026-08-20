@@ -5,13 +5,13 @@ Para la interfaz moderna use
 [`metadata()`](https://jkunst.com/bcchr/reference/metadata.md) o
 [`resolve_series()`](https://jkunst.com/bcchr/reference/resolve_series.md).
 
-## Usage
+## Uso
 
 ``` r
 bcch_SearchSeries(frequency, token = NULL)
 ```
 
-## Arguments
+## Argumentos
 
 - frequency:
 
@@ -21,6 +21,6 @@ bcch_SearchSeries(frequency, token = NULL)
 
   Token del API del Banco Central.
 
-## Value
+## Valor
 
 Un tibble con los nombres originales entregados por el API.

@@ -5,13 +5,13 @@ Plot a data frame returned by
 is a small convenience helper; it does not add classes or modify the
 data.
 
-## Usage
+## Uso
 
 ``` r
 plot_series(x)
 ```
 
-## Arguments
+## Argumentos
 
 - x:
 
@@ -19,6 +19,6 @@ plot_series(x)
   [`get_series()`](https://jkunst.com/bcchr/reference/get_series.md)
   with `date` and `value` columns.
 
-## Value
+## Valor
 
 A ggplot object.
