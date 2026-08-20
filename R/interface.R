@@ -74,11 +74,17 @@
 #'   `QUARTERLY` o `ANNUAL`. Si se omite, devuelve todas las frecuencias.
 #' @param token Token de acceso a la API REST del Banco Central. Por defecto lee
 #'   la opcion `bcch_api_token` y luego la variable de entorno `BCCH_TOKEN`.
+#' @param verbose Si es `TRUE`, informa cuando se consultan las cuatro
+#'   frecuencias. Por defecto usa la opcion `bcchr.verbose` y luego `TRUE`.
 #'
 #' @return Un tibble con la metadata de las series y nombres de columnas en
 #'   snake_case.
 #' @export
-metadata <- function(frequency = NULL, token = NULL) {
+metadata <- function(
+    frequency = NULL,
+    token = NULL,
+    verbose = getOption("bcchr.verbose", TRUE)
+    ) {
 
   frequencies <- c("DAILY", "MONTHLY", "QUARTERLY", "ANNUAL")
 
@@ -93,6 +99,10 @@ metadata <- function(frequency = NULL, token = NULL) {
     }
 
     frequencies <- frequency
+  } else if (isTRUE(verbose)) {
+    rlang::inform(
+      "Consultando las 4 frecuencias del Banco Central; esto puede tardar unos segundos."
+    )
   }
 
   x <- lapply(frequencies, function(freq) {
@@ -122,10 +132,17 @@ metadata <- function(frequency = NULL, token = NULL) {
 #' @param query Texto a buscar, por ejemplo `"imacec"` o `"dolar observado"`.
 #' @param frequency Filtro opcional de frecuencia pasado a [metadata()].
 #' @param token Token de acceso a la API REST del Banco Central.
+#' @param verbose Si es `TRUE`, informa cuando se consultan las cuatro
+#'   frecuencias. Por defecto usa la opcion `bcchr.verbose` y luego `TRUE`.
 #'
 #' @return Un tibble con todas las series candidatas encontradas.
 #' @export
-resolve_series <- function(query, frequency = NULL, token = NULL) {
+resolve_series <- function(
+    query,
+    frequency = NULL,
+    token = NULL,
+    verbose = getOption("bcchr.verbose", TRUE)
+    ) {
 
   if (!is.character(query) || length(query) != 1 || !nzchar(query)) {
     stop("`query` debe ser una cadena de texto no vacia.", call. = FALSE)
@@ -137,7 +154,7 @@ resolve_series <- function(query, frequency = NULL, token = NULL) {
     tolower(x)
   }
 
-  x <- metadata(frequency, token)
+  x <- metadata(frequency, token, verbose = verbose)
   query <- normalize(query)
 
   keep <- grepl(query, normalize(x$series_id), fixed = TRUE) |
@@ -155,16 +172,22 @@ resolve_series <- function(query, frequency = NULL, token = NULL) {
 #'
 #' @param series_id Codigo exacto de la serie del Banco Central.
 #' @param token Token de acceso a la API REST del Banco Central.
+#' @param verbose Si es `TRUE`, informa cuando se consultan las cuatro
+#'   frecuencias. Por defecto usa la opcion `bcchr.verbose` y luego `TRUE`.
 #'
 #' @return Un tibble de una fila con la descripcion de la serie.
 #' @export
-describe_series <- function(series_id, token = NULL) {
+describe_series <- function(
+    series_id,
+    token = NULL,
+    verbose = getOption("bcchr.verbose", TRUE)
+    ) {
 
   if (!is.character(series_id) || length(series_id) != 1 || !nzchar(series_id)) {
     stop("`series_id` debe ser una cadena de texto no vacia.", call. = FALSE)
   }
 
-  x <- metadata(token = token)
+  x <- metadata(token = token, verbose = verbose)
   x <- x[x$series_id == series_id, , drop = FALSE]
 
   if (nrow(x) == 0) {

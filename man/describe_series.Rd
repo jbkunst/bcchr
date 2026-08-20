@@ -2,20 +2,28 @@
 % Please edit documentation in R/interface.R
 \name{describe_series}
 \alias{describe_series}
-\title{Describe one Banco Central series}
+\title{Describir una serie del Banco Central}
 \usage{
-describe_series(series_id, token = NULL)
+describe_series(
+  series_id,
+  token = NULL,
+  verbose = getOption("bcchr.verbose", TRUE)
+)
 }
 \arguments{
-\item{series_id}{Exact Banco Central series code.}
+\item{series_id}{Codigo exacto de la serie del Banco Central.}
 
-\item{token}{Banco Central REST API token.}
+\item{token}{Token de acceso a la API REST del Banco Central.}
+
+\item{verbose}{Si es \code{TRUE}, informa cuando se consultan las cuatro
+frecuencias. Por defecto usa la opcion \code{bcchr.verbose} y luego \code{TRUE}.}
 }
 \value{
-A one-row tibble describing the series.
+Un tibble de una fila con la descripcion de la serie.
 }
 \description{
-Return metadata for one exact Banco Central series code. This function does
-not interpret human-readable names. Use \code{\link[=resolve_series]{resolve_series()}} first when the
-series code is unknown.
+Devuelve la metadata de una serie identificada por su codigo exacto. Esta
+funcion no interpreta nombres en lenguaje natural. Use
+\code{\link[=resolve_series]{resolve_series()}} primero cuando no conozca el
+codigo de la serie.
 }

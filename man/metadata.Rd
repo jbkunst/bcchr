@@ -2,21 +2,29 @@
 % Please edit documentation in R/interface.R
 \name{metadata}
 \alias{metadata}
-\title{Series metadata}
+\title{Metadata de las series}
 \usage{
-metadata(frequency = NULL, token = NULL)
+metadata(
+  frequency = NULL,
+  token = NULL,
+  verbose = getOption("bcchr.verbose", TRUE)
+)
 }
 \arguments{
-\item{frequency}{Optional frequency filter. One of \code{DAILY}, \code{MONTHLY},
-\code{QUARTERLY}, or \code{ANNUAL}. When omitted, all frequencies are returned.}
+\item{frequency}{Filtro opcional de frecuencia. Puede ser \code{DAILY}, \code{MONTHLY},
+\code{QUARTERLY} o \code{ANNUAL}. Si se omite, devuelve todas las frecuencias.}
 
-\item{token}{Banco Central REST API token. By default it reads the
-\code{bcch_api_token} option and then the \code{BCCH_TOKEN} environment variable.}
+\item{token}{Token de acceso a la API REST del Banco Central. Por defecto lee
+la opcion \code{bcch_api_token} y luego la variable de entorno \code{BCCH_TOKEN}.}
+
+\item{verbose}{Si es \code{TRUE}, informa cuando se consultan las cuatro
+frecuencias. Por defecto usa la opcion \code{bcchr.verbose} y luego \code{TRUE}.}
 }
 \value{
-A tibble with series metadata using snake_case column names.
+Un tibble con la metadata de las series y nombres de columnas en snake_case.
 }
 \description{
-Get the current Banco Central series catalog. Use this function to inspect
-which series exist and their frequency and temporal coverage.
+Obtiene el catalogo actual de series disponibles del Banco Central de Chile.
+Use esta funcion para conocer que series existen, su frecuencia y su
+cobertura temporal.
 }

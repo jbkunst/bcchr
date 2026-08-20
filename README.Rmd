@@ -19,65 +19,121 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/jbkunst/bcchr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jbkunst/bcchr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-Paquete para el consumo de información del API de Banco Central de Chile. Contiene
-funciones para el tratamiento y resumen de datos junto a otra funciones para 
-gráficar o transformar la información a objetos `ts`.
+`bcchr` permite descubrir, describir y descargar series de la Base de Datos
+Estadisticos del Banco Central de Chile desde R.
 
-Más información del API en https://si3.bcentral.cl/estadisticas/Principal1/web_services/index.htm.
+La interfaz principal usa nombres simples en `snake_case` y devuelve tibbles con
+columnas consistentes. Las funciones de bajo nivel que reflejan directamente las
+operaciones oficiales `GetSeries` y `SearchSeries` siguen disponibles por
+compatibilidad.
 
-## Installation
+Más información sobre la API del Banco Central en
+<https://si3.bcentral.cl/estadisticas/Principal1/web_services/index.htm>.
 
-You can install the development version of bcchr from [GitHub](https://github.com/) with:
+## Instalación
 
 ```r
 # install.packages("devtools")
 devtools::install_github("jbkunst/bcchr")
 ```
 
-## Example
+## Autenticación
 
-```{r, include=FALSE}
-library(bcchr)
+La API REST del Banco Central requiere un token. Guárdelo en la variable de
+entorno `BCCH_TOKEN`, por ejemplo en su archivo `.Renviron`:
 
-options(
-  bcc_api_user = 178956728,
-  bcc_api_pass = "cxynr4qyLLBw"
-)
+```text
+BCCH_TOKEN=su_token
 ```
 
-Luego de cargar el paquete se debe setear los parámetros de acceso utilizando
-`options`.
+No guarde el token dentro de scripts ni lo suba a GitHub.
 
+Puede verificar que R lo encuentre sin imprimirlo:
+
+```r
+nzchar(Sys.getenv("BCCH_TOKEN"))
+```
+
+## Uso
+
+### Explorar el catálogo
+
+`metadata()` devuelve las series disponibles y su metadata. Si conoce la
+frecuencia, indicarla evita consultas innecesarias:
 
 ```{r, eval=FALSE}
 library(bcchr)
 
-options(
-  bcc_api_user = "usuario",
-  bcc_api_pass = "contraseña"
-)
+metadata("MONTHLY") |> head()
 ```
 
-Luego la funciones acceden a estos valores para hacer los _request_ a la API.
-
-`bcch_GetSeries()` now reads Banco Central JSON responses as raw bytes and
-converts them from `ISO-8859-1` to `UTF-8` before parsing. This avoids
-encoding-related JSON parsing failures in Linux and GitHub Actions
-environments.
+Si no especifica una frecuencia, `metadata()` consulta `DAILY`, `MONTHLY`,
+`QUARTERLY` y `ANNUAL`. El paquete informa este comportamiento porque requiere
+cuatro requests. El mensaje puede desactivarse con:
 
 ```{r, eval=FALSE}
-bcchr::bcch_GetSeries(
-  "F032.PIB.FLU.R.CLP.EP18.Z.Z.0.T",
-  firstdate = as.Date("2000-01-01"),
-  lastdate = Sys.Date()
+options(bcchr.verbose = FALSE)
+```
+
+### Buscar una serie
+
+`resolve_series()` busca candidatos a partir de texto humano, pero no elige una
+serie por el usuario:
+
+```{r, eval=FALSE}
+resolve_series(
+  "imacec",
+  frequency = "MONTHLY"
 )
 ```
 
-```{r}
-desempleo <- bcch_GetSeries("F049.DES.TAS.INE9.10.M")
+### Describir una serie
 
-desempleo
+Cuando ya conoce el código exacto, `describe_series()` devuelve su metadata:
 
-autoplot(desempleo)
+```{r, eval=FALSE}
+describe_series("F073.TCO.PRE.Z.D")
 ```
 
+### Descargar observaciones
+
+`get_series()` recibe un código exacto y un rango opcional de fechas. No intenta
+interpretar nombres ni resolver series:
+
+```{r, eval=FALSE}
+dolar <- get_series(
+  "F073.TCO.PRE.Z.D",
+  from = "2026-01-01",
+  to = "2026-02-01"
+)
+
+dolar
+```
+
+El resultado usa una estructura pequeña y predecible:
+
+```text
+# A tibble: ... x 3
+  date       value status_code
+  <date>     <dbl> <chr>
+  ...
+```
+
+### Graficar
+
+`plot_series()` es un helper opcional. `ggplot2` solo se necesita al usar esta
+función:
+
+```{r, eval=FALSE}
+plot_series(dolar)
+```
+
+Si `ggplot2` no está instalado, `rlang` ofrecerá instalarlo en sesiones
+interactivas.
+
+## API de bajo nivel
+
+`bcch_GetSeries()` y `bcch_SearchSeries()` se mantienen para quienes necesiten
+trabajar directamente con las dos operaciones oficiales del Banco Central y sus
+nombres de campos originales. Para código nuevo se recomienda la interfaz
+`metadata()` / `resolve_series()` / `describe_series()` / `get_series()`.
