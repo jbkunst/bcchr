@@ -46,7 +46,8 @@ entorno `BCCH_TOKEN`, por ejemplo en su archivo `.Renviron`:
 BCCH_TOKEN=su_token
 ```
 
-No guarde el token dentro de scripts ni lo suba a GitHub.
+No guarde el token dentro de scripts ni lo suba a GitHub. Todos los ejemplos
+que consultan directamente la API requieren que `BCCH_TOKEN` esté configurado.
 
 Puede verificar que R lo encuentre sin imprimirlo:
 
@@ -64,6 +65,7 @@ frecuencia, indicarla evita consultas innecesarias:
 ```{r, eval=FALSE}
 library(bcchr)
 
+# Requiere BCCH_TOKEN configurado; ver Autenticación.
 metadata("MONTHLY") |> head()
 ```
 
@@ -81,6 +83,7 @@ options(bcchr.verbose = FALSE)
 serie por el usuario:
 
 ```{r, eval=FALSE}
+# Requiere BCCH_TOKEN configurado; ver Autenticación.
 resolve_series(
   "imacec",
   frequency = "MONTHLY"
@@ -92,6 +95,7 @@ resolve_series(
 Cuando ya conoce el código exacto, `describe_series()` devuelve su metadata:
 
 ```{r, eval=FALSE}
+# Requiere BCCH_TOKEN configurado; ver Autenticación.
 describe_series("F073.TCO.PRE.Z.D")
 ```
 
@@ -101,6 +105,7 @@ describe_series("F073.TCO.PRE.Z.D")
 interpretar nombres ni resolver series:
 
 ```{r, eval=FALSE}
+# Requiere BCCH_TOKEN configurado; ver Autenticación.
 dolar <- get_series(
   "F073.TCO.PRE.Z.D",
   from = "2026-01-01",
@@ -125,6 +130,7 @@ El resultado usa una estructura pequeña y predecible:
 función:
 
 ```{r, eval=FALSE}
+# Este ejemplo usa `dolar`, obtenido previamente con get_series().
 plot_series(dolar)
 ```
 
