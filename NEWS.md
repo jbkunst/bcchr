@@ -1,3 +1,13 @@
+# bcchr 0.1.0.9000
+
+* `metadata()`, `resolve_series()`, `describe_series()` y `get_series()` ahora
+  aceptan vectores. Las consultas de varias series reutilizan la metadata y
+  devuelven resultados en formato largo.
+* `get_series()` agrega `series_id` a su resultado y respeta el limite oficial
+  de cinco consultas de series por segundo.
+* `plot_series()` separa automaticamente varias series y la referencia de
+  pkgdown incorpora ejemplos ejecutables cuando `BCCH_TOKEN` esta disponible.
+
 # bcchr 0.1.0
 
 ## Interfaz moderna

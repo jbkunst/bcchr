@@ -64,14 +64,24 @@
   tibble::as_tibble(values)
 }
 
+.check_character_vector <- function(x, name) {
+
+  if (!is.character(x) || length(x) == 0 || anyNA(x) || any(!nzchar(trimws(x)))) {
+    stop(paste0("`", name, "` debe ser un vector de texto no vacio."), call. = FALSE)
+  }
+
+  invisible(x)
+}
+
 #' Metadata de las series
 #'
 #' Obtiene el catalogo actual de series disponibles del Banco Central de Chile.
 #' Use esta funcion para conocer que series existen, su frecuencia y su
 #' cobertura temporal.
 #'
-#' @param frequency Filtro opcional de frecuencia. Puede ser `DAILY`, `MONTHLY`,
-#'   `QUARTERLY` o `ANNUAL`. Si se omite, devuelve todas las frecuencias.
+#' @param frequency Vector opcional de frecuencias. Puede contener `DAILY`,
+#'   `MONTHLY`, `QUARTERLY` o `ANNUAL`. Si se omite, devuelve todas las
+#'   frecuencias.
 #' @param token Token de acceso a la API REST del Banco Central. Por defecto lee
 #'   la opcion `bcch_api_token` y luego la variable de entorno `BCCH_TOKEN`.
 #' @param verbose Si es `TRUE`, informa cuando se consultan las cuatro
@@ -79,6 +89,12 @@
 #'
 #' @return Un tibble con la metadata de las series y nombres de columnas en
 #'   snake_case.
+#'
+#' @examples
+#' if (nzchar(Sys.getenv("BCCH_TOKEN"))) {
+#'   metadata(c("MONTHLY", "QUARTERLY"), verbose = FALSE) |>
+#'     head()
+#' }
 #' @export
 metadata <- function(
     frequency = NULL,
@@ -89,9 +105,10 @@ metadata <- function(
   frequencies <- c("DAILY", "MONTHLY", "QUARTERLY", "ANNUAL")
 
   if (!is.null(frequency)) {
-    frequency <- toupper(frequency)
+    .check_character_vector(frequency, "frequency")
+    frequency <- unique(toupper(frequency))
 
-    if (length(frequency) != 1 || !frequency %in% frequencies) {
+    if (any(!frequency %in% frequencies)) {
       stop(
         "`frequency` debe ser DAILY, MONTHLY, QUARTERLY o ANNUAL.",
         call. = FALSE
@@ -125,17 +142,31 @@ metadata <- function(
 
 #' Resolver una descripcion a series del Banco Central
 #'
-#' Busca en el catalogo del Banco Central usando un termino legible por una
-#' persona y devuelve las series candidatas. Esta funcion solo encuentra
+#' Busca en el catalogo del Banco Central usando uno o varios terminos legibles
+#' por una persona y devuelve las series candidatas. Esta funcion solo encuentra
 #' candidatos; no elige una serie por el usuario.
 #'
-#' @param query Texto a buscar, por ejemplo `"imacec"` o `"dolar observado"`.
+#' @param query Vector de textos a buscar, por ejemplo `"imacec"` o
+#'   `c("dolar observado", "unidad de fomento")`.
 #' @param frequency Filtro opcional de frecuencia pasado a [metadata()].
 #' @param token Token de acceso a la API REST del Banco Central.
 #' @param verbose Si es `TRUE`, informa cuando se consultan las cuatro
 #'   frecuencias. Por defecto usa la opcion `bcchr.verbose` y luego `TRUE`.
 #'
-#' @return Un tibble con todas las series candidatas encontradas.
+#' @return Un tibble con todas las series candidatas encontradas y una columna
+#'   `query` que identifica el texto que produjo cada resultado.
+#'
+#' @examples
+#' if (nzchar(Sys.getenv("BCCH_TOKEN"))) {
+#'   candidates <- resolve_series(
+#'     c("dolar observado", "unidad de fomento"),
+#'     frequency = "DAILY",
+#'     verbose = FALSE
+#'   )
+#'
+#'   candidates[c("query", "series_id", "frequency", "spanish_title")] |>
+#'     head()
+#' }
 #' @export
 resolve_series <- function(
     query,
@@ -144,9 +175,7 @@ resolve_series <- function(
     verbose = getOption("bcchr.verbose", TRUE)
     ) {
 
-  if (!is.character(query) || length(query) != 1 || !nzchar(query)) {
-    stop("`query` debe ser una cadena de texto no vacia.", call. = FALSE)
-  }
+  .check_character_vector(query, "query")
 
   normalize <- function(x) {
     x <- iconv(x, to = "ASCII//TRANSLIT")
@@ -155,27 +184,44 @@ resolve_series <- function(
   }
 
   x <- metadata(frequency, token, verbose = verbose)
-  query <- normalize(query)
+  normalized_query <- normalize(query)
+  normalized_series_id <- normalize(x$series_id)
+  normalized_spanish_title <- normalize(x$spanish_title)
+  normalized_english_title <- normalize(x$english_title)
 
-  keep <- grepl(query, normalize(x$series_id), fixed = TRUE) |
-    grepl(query, normalize(x$spanish_title), fixed = TRUE) |
-    grepl(query, normalize(x$english_title), fixed = TRUE)
+  results <- Map(function(label, term) {
+    keep <- grepl(term, normalized_series_id, fixed = TRUE) |
+      grepl(term, normalized_spanish_title, fixed = TRUE) |
+      grepl(term, normalized_english_title, fixed = TRUE)
 
-  x[keep, , drop = FALSE]
+    result <- x[keep, , drop = FALSE]
+    result$query <- rep(label, nrow(result))
+    result[c("query", setdiff(names(result), "query"))]
+  }, query, normalized_query)
+
+  tibble::as_tibble(do.call(rbind, results))
 }
 
 #' Describir una serie del Banco Central
 #'
-#' Devuelve la metadata de una serie identificada por su codigo exacto. Esta
-#' funcion no interpreta nombres en lenguaje natural. Use [resolve_series()]
-#' primero cuando no conozca el codigo de la serie.
+#' Devuelve la metadata de una o varias series identificadas por sus codigos
+#' exactos. Esta funcion no interpreta nombres en lenguaje natural. Use
+#' [resolve_series()] primero cuando no conozca los codigos.
 #'
-#' @param series_id Codigo exacto de la serie del Banco Central.
+#' @param series_id Vector de codigos exactos de series del Banco Central.
 #' @param token Token de acceso a la API REST del Banco Central.
 #' @param verbose Si es `TRUE`, informa cuando se consultan las cuatro
 #'   frecuencias. Por defecto usa la opcion `bcchr.verbose` y luego `TRUE`.
 #'
-#' @return Un tibble de una fila con la descripcion de la serie.
+#' @return Un tibble con una fila por cada codigo solicitado.
+#'
+#' @examples
+#' if (nzchar(Sys.getenv("BCCH_TOKEN"))) {
+#'   describe_series(
+#'     c("F073.TCO.PRE.Z.D", "F073.UFF.PRE.Z.D"),
+#'     verbose = FALSE
+#'   )[c("series_id", "frequency", "spanish_title")]
+#' }
 #' @export
 describe_series <- function(
     series_id,
@@ -183,54 +229,80 @@ describe_series <- function(
     verbose = getOption("bcchr.verbose", TRUE)
     ) {
 
-  if (!is.character(series_id) || length(series_id) != 1 || !nzchar(series_id)) {
-    stop("`series_id` debe ser una cadena de texto no vacia.", call. = FALSE)
-  }
+  .check_character_vector(series_id, "series_id")
 
   x <- metadata(token = token, verbose = verbose)
-  x <- x[x$series_id == series_id, , drop = FALSE]
+  positions <- match(series_id, x$series_id)
 
-  if (nrow(x) == 0) {
+  if (anyNA(positions)) {
+    unknown <- unique(series_id[is.na(positions)])
     stop(
-      "Codigo de serie desconocido. Use `resolve_series()` para encontrar un codigo valido.",
+      paste0(
+        "Codigos de serie desconocidos: ",
+        paste(unknown, collapse = ", "),
+        ". Use `resolve_series()` para encontrar codigos validos."
+      ),
       call. = FALSE
     )
   }
 
-  x
+  x[positions, , drop = FALSE]
 }
 
-#' Obtener observaciones de una serie del Banco Central
+#' Obtener observaciones de series del Banco Central
 #'
-#' Obtiene las observaciones de una serie identificada por su codigo exacto y,
-#' opcionalmente, un rango de fechas. Esta funcion solo obtiene datos para el
-#' codigo entregado; nunca interpreta ni resuelve nombres de series.
+#' Obtiene las observaciones de una o varias series identificadas por sus
+#' codigos exactos y, opcionalmente, un rango de fechas comun. Esta funcion solo
+#' obtiene datos para los codigos entregados; nunca interpreta ni resuelve
+#' nombres de series.
 #'
-#' @param series_id Codigo exacto de la serie del Banco Central.
+#' @param series_id Vector de codigos exactos de series del Banco Central.
 #' @param from Fecha inicial opcional en formato `YYYY-MM-DD` o como objeto
 #'   `Date`.
 #' @param to Fecha final opcional en formato `YYYY-MM-DD` o como objeto `Date`.
 #' @param token Token de acceso a la API REST del Banco Central. Por defecto lee
 #'   la opcion `bcch_api_token` y luego la variable de entorno `BCCH_TOKEN`.
 #'
-#' @return Un tibble con las columnas `date`, `value` y `status_code`.
+#' @return Un tibble en formato largo con las columnas `series_id`, `date`,
+#'   `value` y `status_code`.
+#'
+#' @examples
+#' if (nzchar(Sys.getenv("BCCH_TOKEN"))) {
+#'   indicators <- get_series(
+#'     c("F073.TCO.PRE.Z.D", "F073.UFF.PRE.Z.D"),
+#'     from = "2025-01-02",
+#'     to = "2025-01-05"
+#'   )
+#'
+#'   indicators |> head()
+#' }
 #' @export
 get_series <- function(series_id, from = NULL, to = NULL, token = NULL) {
 
-  if (!is.character(series_id) || length(series_id) != 1 || !nzchar(series_id)) {
-    stop("`series_id` debe ser una cadena de texto no vacia.", call. = FALSE)
-  }
+  .check_character_vector(series_id, "series_id")
+  series_id <- unique(series_id)
 
-  x <- bcch_GetSeries(
-    timeseries = series_id,
-    firstdate = from,
-    lastdate = to,
-    token = token
-  )
+  results <- lapply(seq_along(series_id), function(index) {
+    # La API permite consultar hasta cinco series distintas por segundo.
+    if (index > 1L && (index - 1L) %% 5L == 0L) {
+      Sys.sleep(1)
+    }
 
-  tibble::tibble(
-    date = x$indexDateString,
-    value = x$value,
-    status_code = x$statusCode
-  )
+    id <- series_id[[index]]
+    x <- bcch_GetSeries(
+      timeseries = id,
+      firstdate = from,
+      lastdate = to,
+      token = token
+    )
+
+    tibble::tibble(
+      series_id = rep(id, nrow(x)),
+      date = x$indexDateString,
+      value = x$value,
+      status_code = x$statusCode
+    )
+  })
+
+  tibble::as_tibble(do.call(rbind, results))
 }

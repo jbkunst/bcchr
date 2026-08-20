@@ -12,7 +12,8 @@ resolve_series(
 )
 }
 \arguments{
-\item{query}{Texto a buscar, por ejemplo \code{"imacec"} o \code{"dolar observado"}.}
+\item{query}{Vector de textos a buscar, por ejemplo \code{"imacec"} o
+\code{c("dolar observado", "unidad de fomento")}.}
 
 \item{frequency}{Filtro opcional de frecuencia pasado a \code{\link[=metadata]{metadata()}}.}
 
@@ -22,10 +23,23 @@ resolve_series(
 frecuencias. Por defecto usa la opcion \code{bcchr.verbose} y luego \code{TRUE}.}
 }
 \value{
-Un tibble con todas las series candidatas encontradas.
+Un tibble con todas las series candidatas encontradas y una columna
+\code{query} que identifica el texto que produjo cada resultado.
 }
 \description{
-Busca en el catalogo del Banco Central usando un termino legible por una
-persona y devuelve las series candidatas. Esta funcion solo encuentra
+Busca en el catalogo del Banco Central usando uno o varios terminos legibles
+por una persona y devuelve las series candidatas. Esta funcion solo encuentra
 candidatos; no elige una serie por el usuario.
+}
+\examples{
+if (nzchar(Sys.getenv("BCCH_TOKEN"))) {
+  candidates <- resolve_series(
+    c("dolar observado", "unidad de fomento"),
+    frequency = "DAILY",
+    verbose = FALSE
+  )
+
+  candidates[c("query", "series_id", "frequency", "spanish_title")] |>
+    head()
+}
 }

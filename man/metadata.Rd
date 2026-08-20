@@ -11,8 +11,9 @@ metadata(
 )
 }
 \arguments{
-\item{frequency}{Filtro opcional de frecuencia. Puede ser \code{DAILY}, \code{MONTHLY},
-\code{QUARTERLY} o \code{ANNUAL}. Si se omite, devuelve todas las frecuencias.}
+\item{frequency}{Vector opcional de frecuencias. Puede contener \code{DAILY},
+\code{MONTHLY}, \code{QUARTERLY} o \code{ANNUAL}. Si se omite, devuelve todas las
+frecuencias.}
 
 \item{token}{Token de acceso a la API REST del Banco Central. Por defecto lee
 la opcion \code{bcch_api_token} y luego la variable de entorno \code{BCCH_TOKEN}.}
@@ -27,4 +28,10 @@ Un tibble con la metadata de las series y nombres de columnas en snake_case.
 Obtiene el catalogo actual de series disponibles del Banco Central de Chile.
 Use esta funcion para conocer que series existen, su frecuencia y su
 cobertura temporal.
+}
+\examples{
+if (nzchar(Sys.getenv("BCCH_TOKEN"))) {
+  metadata(c("MONTHLY", "QUARTERLY"), verbose = FALSE) |>
+    head()
+}
 }

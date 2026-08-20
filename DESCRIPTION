@@ -1,6 +1,6 @@
 Package: bcchr
 Title: API para Base de Datos Estadísticos del Banco Central de Chile
-Version: 0.1.0
+Version: 0.1.0.9000
 Authors@R: c(
     person("Joshua", "Kunst", email = "jbkunst@gmail.com", role = c("aut", "cre")),
     person("Ignacio", "Rossi", email = "ijrossi@uc.cl", role = c("aut"))
