@@ -9,7 +9,7 @@
 ## Cita
 
 Código:
-[`DESCRIPTION`](https://github.com/jbkunst/bcchr/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/jbkunst/bcchr/blob/v0.1.0/DESCRIPTION)
 
 Kunst J, Rossi I (2026). *bcchr: API para Base de Datos Estadísticos del
 Banco Central de Chile*. R package version 0.1.0,
