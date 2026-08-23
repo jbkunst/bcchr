@@ -2,6 +2,11 @@
 
 ## bcchr 0.1.0.9000
 
+- [`resolve_series()`](https://jkunst.com/bcchr/reference/resolve_series.md)
+  ahora separa las consultas en palabras y exige que todos los terminos
+  aparezcan en el codigo o los titulos de la serie, sin requerir que
+  formen una frase contigua. La busqueda sigue ignorando mayusculas y
+  acentos y conserva el soporte para multiples consultas.
 - [`metadata()`](https://jkunst.com/bcchr/reference/metadata.md),
   [`resolve_series()`](https://jkunst.com/bcchr/reference/resolve_series.md),
   [`describe_series()`](https://jkunst.com/bcchr/reference/describe_series.md)

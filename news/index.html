@@ -36,6 +36,8 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9000" id="bcchr-0109000">bcchr 0.1.0.9000<a class="anchor" aria-label="anchor" href="#bcchr-0109000"></a></h2>
 <ul><li>
+<code><a href="../reference/resolve_series.html">resolve_series()</a></code> ahora separa las consultas en palabras y exige que todos los terminos aparezcan en el codigo o los titulos de la serie, sin requerir que formen una frase contigua. La busqueda sigue ignorando mayusculas y acentos y conserva el soporte para multiples consultas.</li>
+<li>
 <code><a href="../reference/metadata.html">metadata()</a></code>, <code><a href="../reference/resolve_series.html">resolve_series()</a></code>, <code><a href="../reference/describe_series.html">describe_series()</a></code> y <code><a href="../reference/get_series.html">get_series()</a></code> ahora aceptan vectores. Las consultas de varias series reutilizan la metadata y devuelven resultados en formato largo.</li>
 <li>
 <code><a href="../reference/get_series.html">get_series()</a></code> agrega <code>series_id</code> a su resultado y respeta el limite oficial de cinco consultas de series por segundo.</li>

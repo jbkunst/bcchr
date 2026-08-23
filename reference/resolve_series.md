@@ -1,8 +1,12 @@
 # Resolver una descripcion a series del Banco Central
 
 Busca en el catalogo del Banco Central usando uno o varios terminos
-legibles por una persona y devuelve las series candidatas. Esta funcion
-solo encuentra candidatos; no elige una serie por el usuario.
+legibles por una persona y devuelve las series candidatas. Las busquedas
+ignoran mayusculas y acentos. Cuando una consulta contiene varias
+palabras, todas deben aparecer en alguno de los campos `series_id`,
+`spanish_title` o `english_title`, aunque no sean contiguas ni aparezcan
+en el mismo campo. Esta funcion solo encuentra candidatos; no elige una
+serie por el usuario.
 
 ## Uso
 
