@@ -143,8 +143,11 @@ metadata <- function(
 #' Resolver una descripcion a series del Banco Central
 #'
 #' Busca en el catalogo del Banco Central usando uno o varios terminos legibles
-#' por una persona y devuelve las series candidatas. Esta funcion solo encuentra
-#' candidatos; no elige una serie por el usuario.
+#' por una persona y devuelve las series candidatas. Las busquedas ignoran
+#' mayusculas y acentos. Cuando una consulta contiene varias palabras, todas
+#' deben aparecer en alguno de los campos `series_id`, `spanish_title` o
+#' `english_title`, aunque no sean contiguas ni aparezcan en el mismo campo.
+#' Esta funcion solo encuentra candidatos; no elige una serie por el usuario.
 #'
 #' @param query Vector de textos a buscar, por ejemplo `"imacec"` o
 #'   `c("dolar observado", "unidad de fomento")`.
@@ -184,20 +187,24 @@ resolve_series <- function(
   }
 
   x <- metadata(frequency, token, verbose = verbose)
-  normalized_query <- normalize(query)
   normalized_series_id <- normalize(x$series_id)
   normalized_spanish_title <- normalize(x$spanish_title)
   normalized_english_title <- normalize(x$english_title)
 
-  results <- Map(function(label, term) {
-    keep <- grepl(term, normalized_series_id, fixed = TRUE) |
-      grepl(term, normalized_spanish_title, fixed = TRUE) |
-      grepl(term, normalized_english_title, fixed = TRUE)
+  results <- lapply(query, function(label) {
+    terms <- strsplit(trimws(normalize(label)), "[[:space:]]+")[[1]]
+    matches <- vapply(terms, function(term) {
+      grepl(term, normalized_series_id, fixed = TRUE) |
+        grepl(term, normalized_spanish_title, fixed = TRUE) |
+        grepl(term, normalized_english_title, fixed = TRUE)
+    }, logical(nrow(x)))
+
+    keep <- if (length(terms) == 1L) matches else rowSums(matches) == length(terms)
 
     result <- x[keep, , drop = FALSE]
     result$query <- rep(label, nrow(result))
     result[c("query", setdiff(names(result), "query"))]
-  }, query, normalized_query)
+  })
 
   tibble::as_tibble(do.call(rbind, results))
 }

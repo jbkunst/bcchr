@@ -1,5 +1,9 @@
 # bcchr 0.1.0.9000
 
+* `resolve_series()` ahora separa las consultas en palabras y exige que todos
+  los terminos aparezcan en el codigo o los titulos de la serie, sin requerir
+  que formen una frase contigua. La busqueda sigue ignorando mayusculas y
+  acentos y conserva el soporte para multiples consultas.
 * `metadata()`, `resolve_series()`, `describe_series()` y `get_series()` ahora
   aceptan vectores. Las consultas de varias series reutilizan la metadata y
   devuelven resultados en formato largo.
