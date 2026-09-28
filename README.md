@@ -4,6 +4,10 @@
 
 Cliente R pequeño para descubrir, describir y descargar una o varias series de la Base de Datos Estadísticos del Banco Central de Chile.
 
+## ¿Por qué existe?
+
+La Base de Datos Estadísticos ya ofrece una API. `bcchr` existe para poder usarla cómodamente desde R: buscar series, revisar su metadata y descargar una o varias series con una interfaz pequeña y consistente, sin tener que trabajar directamente con las operaciones HTTP de la API.
+
 Documentación completa: <https://jkunst.com/bcchr/>
 
 ## Instalación
