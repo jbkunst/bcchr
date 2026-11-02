@@ -6,7 +6,9 @@ obligatorios.
 
 Los ejemplos de esta página consultan la API del Banco Central y
 requieren que `BCCH_TOKEN` esté configurado. Si no existe el token, el
-código se muestra pero no se ejecuta al construir la vignette.
+código se muestra pero no se ejecuta al construir la vignette. Si la API
+no está accesible por un problema de conexión, se informa el motivo y se
+omiten los gráficos dependientes.
 
 ## Descargar una serie
 
@@ -19,27 +21,38 @@ serie es exacto; cuando no lo conozca puede encontrar candidatos con
 library(bcchr)
 
 # Requiere BCCH_TOKEN configurado.
-dolar <- get_series(
-  "F073.TCO.PRE.Z.D",
-  from = Sys.Date() - 365 * 5,
-  to = Sys.Date()
+dolar <- tryCatch(
+  get_series(
+    "F073.TCO.PRE.Z.D",
+    from = Sys.Date() - 365 * 5,
+    to = Sys.Date()
+  ),
+  curl_error = function(error) {
+    message("No se pudo consultar la API del Banco Central: ", conditionMessage(error))
+    NULL
+  }
 )
 
-dolar <- dolar[
-  dolar$status_code == "OK" & !is.na(dolar$value),
-  c("date", "value")
-]
+# Los siguientes ejemplos requieren una descarga disponible.
+knitr::opts_chunk$set(eval = !is.null(dolar))
 
-tail(dolar)
+if (!is.null(dolar)) {
+  dolar <- dolar[
+    dolar$status_code == "OK" & !is.na(dolar$value),
+    c("date", "value")
+  ]
+
+  tail(dolar)
+}
 #> # A tibble: 6 × 2
 #>   date       value
 #>   <date>     <dbl>
-#> 1 2026-09-17  955.
-#> 2 2026-09-21  958.
-#> 3 2026-09-22  952 
-#> 4 2026-09-23  946.
-#> 5 2026-09-24  959.
-#> 6 2026-09-25  966.
+#> 1 2026-10-26  990.
+#> 2 2026-10-27  994.
+#> 3 2026-10-28  985.
+#> 4 2026-10-29  981.
+#> 5 2026-10-30  993.
+#> 6 2026-11-02  993.
 ```
 
 ## La opción rápida
