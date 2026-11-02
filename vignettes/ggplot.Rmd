@@ -24,7 +24,8 @@ con `ggplot2`, sin clases especiales ni métodos de gráfico obligatorios.
 
 Los ejemplos de esta página consultan la API del Banco Central y requieren que
 `BCCH_TOKEN` esté configurado. Si no existe el token, el código se muestra pero
-no se ejecuta al construir la vignette.
+no se ejecuta al construir la vignette. Si la API no está accesible por un
+problema de conexión, se informa el motivo y se omiten los gráficos dependientes.
 
 ## Descargar una serie
 
@@ -35,18 +36,29 @@ exacto; cuando no lo conozca puede encontrar candidatos con `resolve_series()`.
 library(bcchr)
 
 # Requiere BCCH_TOKEN configurado.
-dolar <- get_series(
-  "F073.TCO.PRE.Z.D",
-  from = Sys.Date() - 365 * 5,
-  to = Sys.Date()
+dolar <- tryCatch(
+  get_series(
+    "F073.TCO.PRE.Z.D",
+    from = Sys.Date() - 365 * 5,
+    to = Sys.Date()
+  ),
+  curl_error = function(error) {
+    message("No se pudo consultar la API del Banco Central: ", conditionMessage(error))
+    NULL
+  }
 )
 
-dolar <- dolar[
-  dolar$status_code == "OK" & !is.na(dolar$value),
-  c("date", "value")
-]
+# Los siguientes ejemplos requieren una descarga disponible.
+knitr::opts_chunk$set(eval = !is.null(dolar))
 
-tail(dolar)
+if (!is.null(dolar)) {
+  dolar <- dolar[
+    dolar$status_code == "OK" & !is.na(dolar$value),
+    c("date", "value")
+  ]
+
+  tail(dolar)
+}
 ```
 
 ## La opción rápida
